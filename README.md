@@ -1,2 +1,3 @@
-# BLC_Auto_Ligth_Guide
+# BLC_Automated_Ligth_Guide
 CE Project 2
+
