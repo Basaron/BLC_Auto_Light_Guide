@@ -29,9 +29,10 @@ class Cep2Model:
     def __init__(self):
         self.__devices = {}
 
+    """ For findig the device to resive data"""
     @property
     def actuators_list(self) -> List[Cep2ZigbeeDevice]:
-        return list(filter(lambda s: s.type_ in {"led", "power plug"},
+        return list(filter(lambda s: s.type_ in {"led"},
                            self.__devices.values()))
 
     @property
