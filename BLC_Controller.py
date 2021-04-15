@@ -81,14 +81,5 @@ class Cep2Controller:
                 # Change the state on all actuators, i.e. LEDs and power plugs.
                 for a in self.__devices_model.actuators_list:
                     self.__z2m_client.change_state(a.id_, new_state)
-
-                # Register event in the remote web server.
-                web_event = Cep2WebDeviceEvent(device_id=device.id_,
-                                               device_type=device.type_,
-                                               measurement=occupancy)
-
-                client = Cep2WebClient(self.HTTP_HOST)
-                try:
-                    client.send_event(web_event.to_json())
-                except ConnectionError as ex:
-                    print(f"{ex}")
+                    
+                

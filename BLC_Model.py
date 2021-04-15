@@ -20,6 +20,7 @@ class Cep2ZigbeeDevice:
 
 
 class Cep2Model:
+    
     """ The model class is responsible for representing and managing access to data. In this case,
     the class is a basic dictionary that uses the devices's ID as key to reference the device
     object. This is a very simplistic database and more evolved approaches can be used. For example,
