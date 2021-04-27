@@ -1,6 +1,5 @@
-from Cep2Model import Cep2Model
-from Cep2WebClient import Cep2WebClient, Cep2WebDeviceEvent
-from Cep2Zigbee2mqttClient import (Cep2Zigbee2mqttClient,
+from BLC_Model import Cep2Model
+from BLC_Zigbee2mqttClient import (Cep2Zigbee2mqttClient,
                                    Cep2Zigbee2mqttMessage, Cep2Zigbee2mqttMessageType)
 
 class Cep2Controller:
@@ -13,7 +12,7 @@ class Cep2Controller:
     case, the class listens for zigbee2mqtt events, processes them (turn on another Zigbee device)
     and send an event to a remote HTTP server.
     """
-
+    
     def __init__(self, devices_model: Cep2Model) -> None:
         """ Class initializer. The actuator and monitor devices are loaded (filtered) only when the
         class is instantiated. If the database changes, this is not reflected.
@@ -21,6 +20,7 @@ class Cep2Controller:
         Args:
             devices_model (Cep2Model): the model that represents the data of this application
         """
+        
         self.__devices_model = devices_model
         self.__z2m_client = Cep2Zigbee2mqttClient(host=self.MQTT_BROKER_HOST,
                                                   port=self.MQTT_BROKER_PORT,
@@ -31,6 +31,7 @@ class Cep2Controller:
         """
         self.__z2m_client.connect()
         print(f"Zigbee2Mqtt is {self.__z2m_client.check_health()}")
+        
 
     def stop(self) -> None:
         """ Stop listening for zigbee2mqtt events.
@@ -44,12 +45,12 @@ class Cep2Controller:
         Args:
             message (Cep2Zigbee2mqttMessage): an object with the message received from zigbee2mqtt
         """
+        
         # If message is None (it wasn't parsed), then don't do anything.
         if not message:
             return
 
-        print(
-            f"zigbee2mqtt event received on topic {message.topic}: {message.data}")
+        print(f"zigbee2mqtt event received on topic {message.topic}: {message.data}")
 
         # If the message is not a device event, then don't do anything.
         if message.type_ != Cep2Zigbee2mqttMessageType.DEVICE_EVENT:
@@ -81,7 +82,7 @@ class Cep2Controller:
                 new_state = "ON" if occupancy else "OFF"
 
                 # Change the state on all actuators, i.e. LEDs and power plugs.
-                for a in self.__devices_model.actuators_list:
-                    self.__z2m_client.change_state(a.id_, new_state)
+                self.__z2m_client.change_state(device.led_.id_, new_state)
+
 
 
