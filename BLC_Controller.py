@@ -80,4 +80,8 @@ class Cep2Controller:
                 # (occupancy is true, i.e. a person is present in the room) or OFF.
                 new_state = "ON" if occupancy else "OFF"
 
+                # Change the state on all actuators, i.e. LEDs and power plugs.
+                for a in self.__devices_model.actuators_list:
+                    self.__z2m_client.change_state(a.id_, new_state)
+
 
