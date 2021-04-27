@@ -1,0 +1,23 @@
+CREATE TABLE `blc`.`data` (
+	`event_id` INT KEY AUTO_INCREMENT NOT NULL, 
+	`event` VARCHAR(255), 
+	`timestamp` timestamp NOT NULL, 
+	FOREIGN KEY `UsrID` REFERENCES users(user_id)
+	FOREIGN KEY `sensorID REFERENCS devices(device_id)
+	);
+
+MAYBE ADD TO TIMESTAMP: TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+CREATE TABLE `blc`.`devices` (
+	`device_id` INT KEY AUTO_INCREMENT NOT NULL,
+	`device_type` VARCHAR(30) NOT NULL, 
+	`device_location` VARCHAR (30) NOT NULL
+	);
+
+
+CREATE TABLE `blc`.`users` (
+	`user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+	`username` VARCHAR(64) NOT NULL, 
+	`psw` VARCHAR(64) NOT NULL, 
+	PRIMARY KEY (`user_id`),
+	UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);

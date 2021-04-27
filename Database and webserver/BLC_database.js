@@ -1,6 +1,30 @@
 //Load the server using express
 
-//To create table: CREATE TABLE `blc`.`presentation` (`id` INT KEY AUTO_INCREMENT, `topic` VARCHAR(255), `msg` VARCHAR(255), FOREIGN KEY `UsrID` REFERENCES users(id), `_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, );
+/*To create tables: 
+CREATE TABLE `blc`.`data` (
+	`event_id` INT KEY AUTO_INCREMENT NOT NULL, 
+	`event` VARCHAR(255), 
+	`timestamp` timestamp NOT NULL, 
+	FOREIGN KEY `UsrID` REFERENCES users(user_id)
+	FOREIGN KEY `sensorID REFERENCS devices(device_id)
+	);
+
+MAYBE ADD TO TIMESTAMP: TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+CREATE TABLE `blc`.`devices` (
+	`device_id` INT KEY AUTO_INCREMENT NOT NULL,
+	`device_type` VARCHAR(30) NOT NULL, 
+	`device_location` VARCHAR (30) NOT NULL
+	);
+
+
+CREATE TABLE `blc`.`users` (
+	`user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+	`username` VARCHAR(64) NOT NULL, 
+	`psw` VARCHAR(64) NOT NULL, 
+	PRIMARY KEY (`user_id`),
+	UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
+*/
 
 
 const express = require('express')
@@ -42,9 +66,16 @@ var Topic = 'server/#'; //subscribe to all topics
 client.on('message', mqtt_messsageReceived);
 
 function mqtt_messsageReceived(topic, message, packet) {
+	
+	//const obj = JSON.parse(message.toString())
+	//console.log(obj.event)
+	
+	
 	var message_str = message.toString(); //convert byte array to string
 	console.log(message_str)
 	insert_message(topic, message_str)
+	
+	
 	//message_str = message_str.replace(/\n$/, ''); //remove new line
 
 	//payload syntax: clientID,topic,message
