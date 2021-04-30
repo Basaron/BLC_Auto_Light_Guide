@@ -8,6 +8,8 @@
 
 //TODO: make comments
 
+//TODO: Make a distinction between lower and upper case letters in password?
+
 //Load the server using express
 var mysql = require('mysql'); 
 var mqtt = require('mqtt'); //For connecting to the broker

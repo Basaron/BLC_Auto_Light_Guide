@@ -1,6 +1,8 @@
-//TODO: Make sessions using cookies
+//TODO: Make sessions using cookies, and only make '/' accessible if not logged in. 
 
 //TODO: Implement the login system
+
+//TODO: hash password
 
 //TODO: Make a proper website
 
@@ -13,12 +15,28 @@
 //Libraries
 const express = require('express') //For setting up the website
 const bodyParser = require('body-parser') //For getting the input data
+const session = require('express-session');
 
+
+var userID //TODO: find a better way to store userID (perhaps with sessions?)
+var crypto = require('crypto')
 var mysql = require('mysql') //Connecting to the database
 var app = express()
 
+app.use(session({
+	secret: '123456cat',
+	resave: false,
+	username: '',
+	id: 0,
+	saveUninitialized: true,
+	cookie: {
+		expires: 3600000 //An hour
+	}
+  }));
+
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended:true}))
+
 
 var connection = mysql.createConnection({
 	multipleStatements: true,
@@ -27,31 +45,68 @@ var connection = mysql.createConnection({
 	user: "root",
 	password: "BLC",
 	database: "BLC"
-});
-
+})
 
 app.listen(3000, () => {
     console.log("Server up and running")
 })
 
+function createHash(string_input){
+	const hash = crypto.createHash('sha256')
+	hash.update(string_input);
+	return hash.digest('hex');
+  }
+
 app.get('/', (req, res) => {
 	res.render('login');
 })
 
+app.get('/view', (req, res) => {
+	if (!req.session.loggedin) res.redirect('/') //If not logged in
+	else{
+	console.log("We're here at least!")
+	query = "SELECT * FROM data WHERE user_id = ?"
+	connection.query(query, [req.session.username], (err, rows, fields) => { //TODO: make this to user the session user ID instead of 1
+		if(err){
+			console.log(err)
+		}
+		res.render('data', {title: 'User data', userData: rows})
+	})
+	}
+})
+  
+app.get('/homepage', (req, res) => { //TODO: Make the actual homepage
+	if (!req.session.loggedin){
+		res.redirect('/')
+	} //If not logged in
+	else{
+	res.render('homepage');
+	}
+})
+
+app.get('/logout', (req, res) => { //TODO Make this a proper logout with ending session
+	req.session.destroy();
+	res.redirect('/');
+  })
+
 app.post('/login', (req, res) => {
 	var username = req.body.username
-	var password = req.body.password
+	var password = createHash(req.body.password)
 	//TODO: make hash of password
 	var query = 'SELECT * FROM users WHERE username = ? AND psw = ?'
 	
-	connection.query(query, [username, password], (err, result) => {
+	connection.query(query, [username, password], (err, rows) => {
 		if (err){
 			console.log(err);
 		  }
 		else{
-			if(result.length > 0) {
-				var user_id = result[0].user_id
-				console.log(user_id)
+			if(rows.length > 0) {
+				req.session.username = rows[0].user_id//username
+				req.session.id = rows[0].user_id //DOESNT WORK, PLEASE FIX
+      			req.session.loggedin = true;
+				console.log("Session username = ", req.session.username)
+
+
 				res.redirect('/homepage')			
 			}
 			else{
@@ -61,22 +116,3 @@ app.post('/login', (req, res) => {
 		}
 	})
 })
-
-app.get('/logout', (req, res) => {
-	res.redirect('/');
-  })
-
-  
-app.get('/homepage', (req, res) => {
-	res.render('homepage');
-})
-
-
-function createHash(string_input){
-	const hash = crypto.createHash('sha256')
-	hash.update(string_input);
-	return hash.digest('hex');
-  }
-
-
-

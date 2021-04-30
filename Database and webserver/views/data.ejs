@@ -1,0 +1,45 @@
+<html>
+
+    <head>
+        <style>
+            table, th, td {
+              border: 1px solid black;
+              border-collapse: collapse;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="table-data">
+            <table border="1" border-collapse: collapse>
+                <tr>
+                    <th>Detection time</th>
+                    <th>Time to bathroom</th>
+                    <th>Time on bathroom</th>
+                    <th>Time from bathroom</th>
+                </tr>
+
+                <tr>            
+                <%
+                if(userData.length != 0){
+                    var i = 1;
+                    userData.reverse()
+                    userData.forEach(function(data){ %>
+                        <td> <%=data.start_time %></td>
+                        <td> <%=data.time_to_bathroom %></td>
+                        <td> <%=data.time_on_bathroom %></td>
+                        <td> <%=data.time_from_bathroom %></td>
+                        <td> <a href="/markasunread/<%=data.id%>">View details</a></td>
+                </tr>
+                        <% i++}) %>    
+             <% }   else {%>
+                <tr>
+                    <td colspan="7">No Data Found</td>
+                </tr>
+                <%  } %>
+            </table>
+        </div>
+    </body>    
+</html>
+<br>
+<button onclick="window.location.href='/homepage'">Go to homepage</button><br>
