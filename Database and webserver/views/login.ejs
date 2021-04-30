@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>
+      BLC automated light guide!
+    </title>
+  </head>
+
+  <body>  
+    <h2>
+      Log in
+    </h2>
+
+
+    <!-- Input to login -->
+    <form action="/login" method ="POST">
+      <!-- <label> Email:</label><br> -->
+      <input type="text" name="username" placeholder="Username" maxlength="64" required><br> 
+      <!-- <label> Password:</label><br> -->
+      <input type="password" name="password" placeholder="Password" maxlength="64" id="myInput" required><br>
+
+      <!-- Toggle 'Show Password' -->
+      <input  type="checkbox" id="showpsw" onclick="showPW()"> 
+      <label  for="showpsw"> Show password</label><br>
+      <input type="submit" placeholder="Login">
+    </form>    
+
+  </body>
+
+  <!-- For making toggle password-->
+  <script>
+    function showPW() {
+      var x = document.getElementById("myInput");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+  </script> 
+
+
+</html>
