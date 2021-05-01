@@ -20,23 +20,29 @@ const session = require('express-session');
 
 var userID //TODO: find a better way to store userID (perhaps with sessions?)
 var crypto = require('crypto')
-var mysql = require('mysql') //Connecting to the database
+var mysql = require('mysql'); //Connecting to the database
+const { connect } = require('mqtt');
 var app = express()
+app.use(bodyParser.urlencoded({extended:true}))
 
 app.use(session({
 	secret: '123456cat',
 	resave: false,
 	username: '',
-	id: 0,
 	saveUninitialized: true,
 	cookie: {
+		//httpOnly: true,
+      	//secure: true,
+      	//sameSite: true,
 		expires: 3600000 //An hour
 	}
   }));
 
 app.set('view engine', 'ejs')
-app.use(bodyParser.urlencoded({extended:true}))
 
+app.listen(3000, () => {
+    console.log("Server up and running")
+})
 
 var connection = mysql.createConnection({
 	multipleStatements: true,
@@ -47,9 +53,7 @@ var connection = mysql.createConnection({
 	database: "BLC"
 })
 
-app.listen(3000, () => {
-    console.log("Server up and running")
-})
+
 
 function createHash(string_input){
 	const hash = crypto.createHash('sha256')
@@ -64,7 +68,6 @@ app.get('/', (req, res) => {
 app.get('/view', (req, res) => {
 	if (!req.session.loggedin) res.redirect('/') //If not logged in
 	else{
-	console.log("We're here at least!")
 	query = "SELECT * FROM data WHERE user_id = ?"
 	connection.query(query, [req.session.username], (err, rows, fields) => { //TODO: make this to user the session user ID instead of 1
 		if(err){
@@ -80,7 +83,16 @@ app.get('/homepage', (req, res) => { //TODO: Make the actual homepage
 		res.redirect('/')
 	} //If not logged in
 	else{
-	res.render('homepage');
+	
+	var query = "SELECT username FROM users WHERE user_id = ?;"
+	console.log(req.session.username)
+	connection.query(query, [req.session.username], (err, rows) =>{
+		if(err) console.log(err)
+		else {
+			console.log(rows)
+			res.render('homepage', {title: 'User data', userData: rows})
+	}
+	})
 	}
 })
 

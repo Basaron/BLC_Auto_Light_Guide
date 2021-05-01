@@ -4,13 +4,25 @@
         <style>
             table, th, td {
               border: 1px solid black;
-              border-collapse: collapse;
+              border-collapse: collapse;              
+              padding: 10px;
+              text-align: center;
             }
+            th {
+                background-color: #aaaaaa;
+            }
+            tr:nth-child(odd) {background-color: #f1f1f1;}
         </style>
     </head>
 
+    <head>
+        <title>
+          BLC data view
+        </title>
+      </head>
+      
     <body>
-        <div class="table-data">
+        <div class="table-data" >
             <table border="1" border-collapse: collapse>
                 <tr>
                     <th>Detection time</th>
@@ -29,7 +41,8 @@
                         <td> <%=data.time_to_bathroom %></td>
                         <td> <%=data.time_on_bathroom %></td>
                         <td> <%=data.time_from_bathroom %></td>
-                        <td> <a href="/markasunread/<%=data.id%>">View details</a></td>
+                        <!-- TODO: change up the ref to something else or remove it -->
+                        <td> <a href="/details/<%=data.id%>">View details</a></td>
                 </tr>
                         <% i++}) %>    
              <% }   else {%>

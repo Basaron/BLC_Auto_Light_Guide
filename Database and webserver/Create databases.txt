@@ -35,8 +35,8 @@ CREATE TABLE blc.data  (event_id INT KEY AUTO_INCREMENT NOT NULL,
 
 
 INSERT INTO devices (device_type, device_location) VALUES ("PIR", "bedroom");
-INSERT INTO users (username, psw) VALUES ("test", "123");
-
+INSERT INTO users   (username, psw) VALUES ("test", "123");
+INSERT INTO data    (dscription, start_time, time_to_bathroom, time_on_bathroom, time_from_bathroom, device_id, user_id) VALUES ('User went to bathroom', 1337, 10, 13, 2, 1, 5)
 
 
 
