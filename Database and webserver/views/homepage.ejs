@@ -3,23 +3,26 @@
         <title>
           BLC homepage
         </title>
+        <link rel="stylesheet" href="/assets/main.css">
       </head>    
 
-
-    <body>
+    <div class="homepage">
+      <body>
         <% if(userData.length!=0){
-            var i=1;
-            userData.forEach(function(data){%>
-                <h2>Welcome to your homepage, <%=data.username%>!</h2>
-                <%})}%>
-
-        <button onclick="window.location.href='/view'">View data</button><br>
-        <button onclick="window.location.href='/logout'">Logout</button><br>
+              var i=1;
+              userData.forEach(function(data){%>
+                  <h1>Welcome to your homepage, <%=data.username%>!</h1>
+              <%})
+            }%>
         
-        
-        <button onclick="giveFortune()" style = "position:relative; top: 2000px" >Try your luck!</button>
-        <p id="quotesDisplay"></p>
-    </body>    
+          <button onclick="window.location.href='/view'">View data</button>
+          <button onclick="window.location.href='/logout'">Logout</button>
+          
+          
+          <button onclick="giveFortune()" style = "position:relative; top: 2000px" >Try your luck!</button>
+          <p id="quotesDisplay"></p>
+      </body>    
+    </div>
 </html>
 
         

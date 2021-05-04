@@ -21,9 +21,12 @@ const session = require('express-session');
 var userID //TODO: find a better way to store userID (perhaps with sessions?)
 var crypto = require('crypto')
 var mysql = require('mysql'); //Connecting to the database
+
 const { connect } = require('mqtt');
 var app = express()
 app.use(bodyParser.urlencoded({extended:true}))
+app.use('/assets', express.static('assets')); //To access the CSS style
+app.use('/pictures',  express.static('pictures')); //To access the CSS style
 
 app.use(session({
 	secret: '123456cat',
@@ -31,9 +34,6 @@ app.use(session({
 	username: '',
 	saveUninitialized: true,
 	cookie: {
-		//httpOnly: true,
-      	//secure: true,
-      	//sameSite: true,
 		expires: 3600000 //An hour
 	}
   }));

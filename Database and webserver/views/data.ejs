@@ -1,24 +1,9 @@
 <html>
-
-    <head>
-        <style>
-            table, th, td {
-              border: 1px solid black;
-              border-collapse: collapse;              
-              padding: 10px;
-              text-align: center;
-            }
-            th {
-                background-color: #aaaaaa;
-            }
-            tr:nth-child(odd) {background-color: #f1f1f1;}
-        </style>
-    </head>
-
     <head>
         <title>
           BLC data view
         </title>
+        <link rel="stylesheet" href="/assets/main.css">
       </head>
       
     <body>
@@ -52,7 +37,11 @@
                 <%  } %>
             </table>
         </div>
+        <div class="data">
+            <button style="top:-100px" onclick="window.location.href='/homepage'">Go to homepage</button><br>
+        </div>
+
     </body>    
 </html>
 <br>
-<button onclick="window.location.href='/homepage'">Go to homepage</button><br>
+

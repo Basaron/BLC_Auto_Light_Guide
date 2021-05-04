@@ -1,35 +1,40 @@
+<!DOCTYPE html>
 <html>
+  
   <head>
+    <link rel="stylesheet" href="/assets/main.css">
     <title>
-      BLC Login
+      BLC login
     </title>
+  
   </head>
+  
+  <body>
+    
+    <div class="background-image"> 
+      <div class="login-form"> 
+        <!-- Input to login -->
+        <h1>Welcome to BLC! Please log in below</h1>
+        <form action="/login" method ="POST">
+          <!-- <label> Email:</label><br> -->
+          <input type="text" name="username" placeholder="Username" maxlength="64" required>
+          <!-- <label> Password:</label><br> -->
+          <input type="password" name="password" placeholder="Password" maxlength="64" id="myInput"required>
 
-  <body>  
-    <h2>
-      Log in
-    </h2>
-
-
-    <!-- Input to login -->
-    <form action="/login" method ="POST">
-      <!-- <label> Email:</label><br> -->
-      <input type="text" name="username" placeholder="Username" maxlength="64" required><br> 
-      <!-- <label> Password:</label><br> -->
-      <input type="password" name="password" placeholder="Password" maxlength="64" id="myInput" required><br>
-
-      <!-- Toggle 'Show Password' -->
-      <input type="checkbox" id="showpsw" onclick="showPW()"> 
-      <label for="showpsw"> Show password</label><br>
-      <input type="submit" placeholder="Login">
-    </form>    
+          <!-- Toggle 'Show Password' -->
+            <input type="checkbox" id="eye" onclick="showPW(password)"> 
+            <!-- <label for="eye"> Show password</label> -->
+            <input type="submit" placeholder="Login">
+        </form>    
+      </div>
+    </div>
 
   </body>
 
+
   <!-- For making toggle password-->
   <script>
-    function showPW() {
-      var x = document.getElementById("myInput");
+    function showPW(x) {
       if (x.type === "password") {
         x.type = "text";
       } else {
@@ -40,3 +45,25 @@
 
 
 </html>
+
+
+
+
+
+
+
+<!-- Set a password for the account -->
+<!-- <div class="col-md-12" style="margin: 7px;">
+  <input type="password" id="reg_password" name="reg_password" style="height: 35px;" class="form-control input-lg" placeholder="Password" ng-model="register_password" />
+  <input type="checkbox" id="eye" onclick="if(reg_password.type=='text')reg_password.type='password'; else reg_password.type='text';" />
+</div> -->
+
+
+
+
+
+
+
+
+
+
