@@ -7,7 +7,7 @@ if __name__ == "__main__":
     # Create a data model and add a list of known Zigbee devices.
     # divece friendly names opt/zig/data/configuration.yaml
     devices_model = Cep2Model()
-    devices_model.add([Cep2ZigbeeDevicePir("PIR", "pir", Cep2ZigbeeDeviceLed("LED", "led")),
+    devices_model.add([Cep2ZigbeeDevicePir("PIR", "pir0", None ,Cep2ZigbeeDeviceLed("LED", "led"), None),
                        ])
 
     # Create a controller and give it the data model that was instantiated.
