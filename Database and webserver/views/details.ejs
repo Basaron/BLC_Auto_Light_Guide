@@ -10,10 +10,9 @@
         <div class="table-data" >
             <table border="1" border-collapse: collapse>
                 <tr>
-                    <th>Detection time</th>
-                    <th>Time to bathroom</th>
-                    <th>Time on bathroom</th>
-                    <th>Time from bathroom</th>
+                    <th>Time</th>
+                    <th>Location</th>
+                    <th>Event</th>
                 </tr>
 
                 <tr>            
@@ -23,11 +22,8 @@
                     userData.reverse()
                     userData.forEach(function(data){ %>
                         <td> <%=data.start_time %></td>
-                        <td> <%=data.time_to_bathroom %></td>
-                        <td> <%=data.time_on_bathroom %></td>
-                        <td> <%=data.time_from_bathroom %></td>
-                        <!-- TODO: change up the ref to something else or remove it -->
-                        <td> <a href="/details/<%=data.session_id%>">View details</a></td>
+                        <td> <%=data.device_location %></td>
+                        <td> <%=data.event %></td>
                 </tr>
                         <% i++}) %>    
              <% }   else {%>

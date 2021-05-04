@@ -1,12 +1,4 @@
-//TODO: Make sessions using cookies, and only make '/' accessible if not logged in. 
-
-//TODO: Implement the login system
-
-//TODO: hash password
-
 //TODO: Make a proper website
-
-//TODO: Get data down from the database with foreign keys: https://dba.stackexchange.com/questions/129023/selecting-data-from-another-table-using-a-foreign-key
 
 //TODO: Make comments
 
@@ -53,8 +45,6 @@ var connection = mysql.createConnection({
 	database: "BLC"
 })
 
-
-
 function createHash(string_input){
 	const hash = crypto.createHash('sha256')
 	hash.update(string_input);
@@ -68,16 +58,35 @@ app.get('/', (req, res) => {
 app.get('/view', (req, res) => {
 	if (!req.session.loggedin) res.redirect('/') //If not logged in
 	else{
-	query = "SELECT * FROM data WHERE user_id = ?"
+	query = "SELECT * FROM main_data WHERE user_id = ?"
 	connection.query(query, [req.session.username], (err, rows, fields) => { //TODO: make this to user the session user ID instead of 1
 		if(err){
 			console.log(err)
 		}
+		console.log(rows)
 		res.render('data', {title: 'User data', userData: rows})
 	})
 	}
 })
-  
+
+app.get('/details/:id', (req, res) =>{
+	if (req.session.loggedin){
+	
+	var query = "SELECT dump_data.start_time, dump_data.event, devices.device_location FROM dump_data INNER JOIN devices ON dump_data.device_id=devices.device_id WHERE session_id = ? AND dump_data.user_id = ?;"
+	const session_id = req.params.id
+	
+	connection.query(query, [session_id, req.session.username], (err, rows, fields) => {
+  		if (err) console.log(err)
+		else{
+				res.render('details', { title: 'data', userData: rows})
+			}
+		})
+	} 
+	
+	else res.redirect('/')
+  })
+
+
 app.get('/homepage', (req, res) => { //TODO: Make the actual homepage
 	if (!req.session.loggedin){
 		res.redirect('/')
@@ -95,6 +104,7 @@ app.get('/homepage', (req, res) => { //TODO: Make the actual homepage
 	})
 	}
 })
+
 
 app.get('/logout', (req, res) => { //TODO Make this a proper logout with ending session
 	req.session.destroy();
@@ -128,3 +138,15 @@ app.post('/login', (req, res) => {
 		}
 	})
 })
+
+
+
+//Done TODOS
+
+//TODO: Make sessions using cookies, and only make '/' accessible if not logged in. 
+
+//TODO: Implement the login system
+
+//TODO: hash password
+
+//TODO: Get data down from the database with foreign keys: https://dba.stackexchange.com/questions/129023/selecting-data-from-another-table-using-a-foreign-key

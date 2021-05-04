@@ -8,8 +8,6 @@
 
 //TODO: make comments
 
-//TODO: Make a distinction between lower and upper case letters in password?
-
 //Load the server using express
 var mysql = require('mysql'); 
 var mqtt = require('mqtt'); //For connecting to the broker
@@ -23,6 +21,11 @@ var connection = mysql.createConnection({
 	user: "root",
 	password: "BLC",
 	database: "BLC"
+});
+
+connection.connect(function(err) {
+	if (err) throw err;
+	console.log("Database Connected!");
 });
 
 //If no broker is found
@@ -63,34 +66,23 @@ function mqtt_messsageReceived(topic, message, packet) {
 	}
 	//If not, split the data into variables.
 	else {
-		var description = obj.description
-		var start_time = obj.timestamp	
-		var visit_length = obj.length
-		var user_id = obj.patientId
-		var sensor_id = obj.sensorId
-		var time_to_bathroom = obj.toBathroom
-		var time_from_bathroom = obj.fromBathroom
-	
-		//For viewing/developing
-		console.log(description)
-		console.log("Start time = ", start_time)
-		console.log("Time on bathroom in seconds = ", visit_length)
-		console.log("To bathroom: ", time_to_bathroom)
-		console.log("Patient ID = ", user_id)
-		console.log("Sensor ID = ", sensor_id)
-		
-		//Insert the data
-		insert_message(description, start_time, time_to_bathroom, visit_length, time_from_bathroom, sensor_id, user_id)
-	}	
+		console.log(topic)
+		if(topic === "server/main_table"){
+			insert_data_main_table(obj)
+		}
+		else if (topic === "server/dump_table"){
+			insert_data_dump_table(obj)
+		}
+	}
 };
 
 //insert a row into the tbl_messages table
-function insert_message(description, start_time, time_to_bathroom, visit_length, time_from_bathroom, sensor_id, user_id) { //topic, message_str, packet
-	
+function insert_main(user_id, session_id, start_time, time_to_bathroom, visit_length, time_from_bathroom) { //topic, message_str, packet
+	console.log("Checkpoint 3")
 	//Make the query.
-	var query = "INSERT INTO data (dscription, start_time, time_to_bathroom, time_on_bathroom, time_from_bathroom, device_id, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+	var query = "INSERT INTO main_data (user_id, session_id, start_time, time_to_bathroom, time_on_bathroom, time_from_bathroom) VALUES (?, ?, ?, ?, ?, ?)"
 
-	connection.query(query, [description, start_time, time_to_bathroom, visit_length, time_from_bathroom, sensor_id, user_id], (err) =>{
+	connection.query(query, [user_id, session_id, start_time, time_to_bathroom, visit_length, time_from_bathroom], (err) =>{
 		if (err){
 		  console.log(err);
 		}
@@ -98,11 +90,66 @@ function insert_message(description, start_time, time_to_bathroom, visit_length,
 	});
 };
 
-connection.connect(function(err) {
-	if (err) throw err;
-	console.log("Database Connected!");
-});
 
+function insert_dump(user_id, session_id, start_time, user_device_id, event) { //topic, message_str, packet
+
+	//Make the query.
+	query = "SELECT device_id FROM devices WHERE user_id = ? AND user_device_id = ?;"
+	connection.query(query, [user_id, user_device_id], (err, rows) => {
+		if(err){
+			console.log(err)
+		}
+		else{
+			device_id = rows[0].device_id
+			console.log("THE VALUE IS: ", device_id)
+			var query2 = "INSERT INTO dump_data (user_id, session_id, start_time, device_id, event) VALUES (?, ?, ?, ?, ?)"
+			connection.query(query2, [user_id, session_id, start_time, device_id, event], (err) =>{
+				if (err){
+				console.log(err);
+				}
+				else console.log("Inserted successfully.");
+			});
+	}})
+	
+};
+
+
+function insert_data_main_table (obj){
+	var user_id = obj.patientId
+	var session_id = obj.value1
+	var start_time = obj.timestamp	
+	var time_to_bathroom = obj.value2
+	var visit_length = obj.length
+	var time_from_bathroom = obj.value3
+
+	//For viewing/developing
+	console.log("User ID = ", user_id)
+	console.log("Session ID = ", session_id)
+	console.log("Start time = ", start_time)
+	console.log("To bathroom: ", time_to_bathroom)
+	console.log("Time on bathroom in seconds = ", visit_length)
+	console.log("From bathroom: ", time_from_bathroom)
+	
+	insert_main(user_id, session_id, start_time, time_to_bathroom, visit_length, time_from_bathroom)
+	//Insert the data
+	
+}
+
+function insert_data_dump_table(obj){
+	var user_id = obj.patientId
+	var session_id = obj.value1
+	var start_time = obj.timestamp
+	var user_device_id = obj.sensorId
+	var event = obj.description
+	
+	console.log("User device ID = ", user_device_id)
+	console.log("User ID = ", user_id)
+	console.log("Session ID = ", session_id)
+	console.log("Start time = ", start_time)
+	console.log("Event = ", event)
+
+	insert_dump(user_id, session_id, start_time, user_device_id, event)
+}
 
 //Done TODO:
 //// TODO: Make the JSON object into different variables to upload
@@ -110,3 +157,5 @@ connection.connect(function(err) {
 //TODO: Upload properly
 
 //TODO: Finish the tables so that they follow the 2'nd normal
+
+//TODO: Make a distinction between lower and upper case letters in password
