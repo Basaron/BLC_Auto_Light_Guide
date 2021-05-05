@@ -28,6 +28,9 @@ class Cep2Controller:
                                                   on_message_clbk=self.__zigbee2mqtt_event_received)
 
         self.stateMachine = StateMachine(self.__devices_model, self.__z2m_client)
+        
+        
+        
 
         
 
@@ -35,8 +38,10 @@ class Cep2Controller:
         """ Start listening for zigbee2mqtt events.
         """
         self.__z2m_client.connect()
-        print(f"Zigbee2Mqtt is {self.__z2m_client.check_health()}")
-        
+        #print(f"Zigbee2Mqtt is {self.__z2m_client.check_health()}")
+        device = self.__devices_model.find("PIR")
+        self.__z2m_client.change_state(device.ledOwn.id_, "OFF")
+        self.__z2m_client.change_state(device.ledNext.id_, "OFF")
 
     def stop(self) -> None:
         """ Stop listening for zigbee2mqtt events.
@@ -55,7 +60,7 @@ class Cep2Controller:
         if not message:
             return
 
-        print(f"zigbee2mqtt event received on topic {message.topic}: {message.data}")
+        #print(f"zigbee2mqtt event received on topic {message.topic}: {message.data}")
 
         # If the message is not a device event, then don't do anything.
         if message.type_ != Cep2Zigbee2mqttMessageType.DEVICE_EVENT:
