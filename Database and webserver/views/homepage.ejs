@@ -7,6 +7,7 @@
       <link rel="stylesheet" href="/assets/main.css">
     </head>    
 
+    <!-- <div class="homepage-background"> -->
       <div class="homepage">
       
         <% if(userData.length!=0){
@@ -16,11 +17,13 @@
               <%})
             }%>
           
-          <button onclick="window.location.href='/view'">View data</button>
+          <button onclick="window.location.href='/view'">View sessions</button>
+          <button onclick="window.location.href='/dump'">View all data</button>
           <button onclick="window.location.href='/logout'">Logout</button>
           <p id="quotesDisplay"></p> 
           <button onclick="giveFortune()" style = "position:relative; top: 1000px" >Try your luck!</button>
       </div>
+    <!-- </div> -->
   </body>    
 </html>
 

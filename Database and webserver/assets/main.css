@@ -14,7 +14,7 @@ body, html {
 }
 
 .homepage-background{
-    background-image: url('/Pictures/background.png');
+    background-image: url('/Pictures/strip.png');
     background-position: center; 
     background-repeat: no-repeat;
     background-size: cover;
