@@ -8,6 +8,8 @@
 
 //TODO: make comments
 
+//TODO: remove user_id from dump table, as it can be accessed through the device_id
+
 //Load the server using express
 var mysql = require('mysql'); 
 var mqtt = require('mqtt'); //For connecting to the broker
@@ -98,7 +100,7 @@ function insert_dump(user_id, session_id, start_time, user_device_id, event) { /
 	connection.query(query, [user_id, user_device_id], (err, rows) => {
 		if(err){
 			console.log(err)
-		}
+		} 
 		else{
 			device_id = rows[0].device_id
 			console.log("THE VALUE IS: ", device_id)
@@ -109,8 +111,7 @@ function insert_dump(user_id, session_id, start_time, user_device_id, event) { /
 				}
 				else console.log("Inserted successfully.");
 			});
-	}})
-	
+	}})	
 };
 
 
@@ -121,7 +122,7 @@ function insert_data_main_table (obj){
 	var time_to_bathroom = obj.value2
 	var visit_length = obj.length
 	var time_from_bathroom = obj.value3
-
+	
 	//For viewing/developing
 	console.log("User ID = ", user_id)
 	console.log("Session ID = ", session_id)
@@ -131,9 +132,9 @@ function insert_data_main_table (obj){
 	console.log("From bathroom: ", time_from_bathroom)
 	
 	insert_main(user_id, session_id, start_time, time_to_bathroom, visit_length, time_from_bathroom)
-	//Insert the data
-	
+	//Insert the data	
 }
+
 
 function insert_data_dump_table(obj){
 	var user_id = obj.patientId
@@ -141,6 +142,9 @@ function insert_data_dump_table(obj){
 	var start_time = obj.timestamp
 	var user_device_id = obj.sensorId
 	var event = obj.description
+	var device_id = get_device_id(user_id, user_device_id)
+
+	console.log("Device_id =", device_id)
 	
 	console.log("User device ID = ", user_device_id)
 	console.log("User ID = ", user_id)
