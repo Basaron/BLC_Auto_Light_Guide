@@ -1,4 +1,5 @@
 from BLC_Model import Cep2Model
+from BLC_StateMachine import StateMachine
 from BLC_Zigbee2mqttClient import (Cep2Zigbee2mqttClient,
                                    Cep2Zigbee2mqttMessage, Cep2Zigbee2mqttMessageType)
 
@@ -26,12 +27,21 @@ class Cep2Controller:
                                                   port=self.MQTT_BROKER_PORT,
                                                   on_message_clbk=self.__zigbee2mqtt_event_received)
 
+        self.stateMachine = StateMachine(self.__devices_model, self.__z2m_client)
+        
+        
+        
+
+        
+
     def start(self) -> None:
         """ Start listening for zigbee2mqtt events.
         """
         self.__z2m_client.connect()
-        print(f"Zigbee2Mqtt is {self.__z2m_client.check_health()}")
-        
+        #print(f"Zigbee2Mqtt is {self.__z2m_client.check_health()}")
+        device = self.__devices_model.find("PIR")
+        self.__z2m_client.change_state(device.ledOwn.id_, "OFF")
+        self.__z2m_client.change_state(device.ledNext.id_, "OFF")
 
     def stop(self) -> None:
         """ Stop listening for zigbee2mqtt events.
@@ -50,7 +60,7 @@ class Cep2Controller:
         if not message:
             return
 
-        print(f"zigbee2mqtt event received on topic {message.topic}: {message.data}")
+        #print(f"zigbee2mqtt event received on topic {message.topic}: {message.data}")
 
         # If the message is not a device event, then don't do anything.
         if message.type_ != Cep2Zigbee2mqttMessageType.DEVICE_EVENT:
@@ -69,20 +79,10 @@ class Cep2Controller:
         # web server.
         device = self.__devices_model.find(device_id)
 
-        print(device)
-
         if device:
             try:
                 occupancy = message.event["occupancy"]
             except KeyError:
                 pass
             else:
-                # Based on the value of occupancy, change the state of the actuators to ON
-                # (occupancy is true, i.e. a person is present in the room) or OFF.
-                new_state = "ON" if occupancy else "OFF"
-
-                # Change the state on all actuators, i.e. LEDs and power plugs.
-                self.__z2m_client.change_state(device.led_.id_, new_state)
-
-
-
+                self.stateMachine.trigger(occupancy, device_id)

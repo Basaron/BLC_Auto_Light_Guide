@@ -11,7 +11,10 @@ class Cep2ZigbeeDevicePir:
 
     id_: str
     type_: str
-    led_: Cep2ZigbeeDeviceLed
+    ledPre: Cep2ZigbeeDeviceLed
+    ledOwn: Cep2ZigbeeDeviceLed
+    ledNext: Cep2ZigbeeDeviceLed
+
 
 
 class Cep2Model:
