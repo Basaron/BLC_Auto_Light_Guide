@@ -69,6 +69,20 @@ app.get('/view', (req, res) => {
 	}
 })
 
+app.get('/dump', (req, res) => {
+	if (!req.session.loggedin) res.redirect('/') //If not logged in
+	else{
+		var query = "SELECT dump_data.start_time, dump_data.event, devices.device_location FROM dump_data INNER JOIN devices ON dump_data.device_id=devices.device_id WHERE dump_data.user_id = ?;"
+		
+		connection.query(query, [req.session.username], (err, rows, fields) => {
+			  if (err) console.log(err)
+			else{
+					res.render('dump', { title: 'dump', userData: rows})
+				}
+			})
+		} 
+})
+
 app.get('/details/:id', (req, res) =>{
 	if (req.session.loggedin){
 	

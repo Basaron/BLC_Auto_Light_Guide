@@ -27,12 +27,12 @@ CREATE TABLE blc.main_data
 			user_id INT UNSIGNED NOT NULL, 
 			session_id int NOT NULL,
 			start_time VARCHAR(30) NOT NULL,  
-			time_to_bathroom int NOT NULL, 
-			time_on_bathroom int NOT NULL,  
-			time_from_bathroom int NOT NULL, 
+			time_to_bathroom VARCHAR(30) NOT NULL, 
+			time_on_bathroom VARCHAR(30) NOT NULL,  
+			time_from_bathroom VARCHAR(30) NOT NULL, 
 			FOREIGN KEY (user_id) REFERENCES users(user_id)
 			);
-CREATE TABLE blc.main_data (event_id INT KEY AUTO_INCREMENT NOT NULL, user_id INT UNSIGNED NOT NULL, session_id int NOT NULL,start_time VARCHAR(30) NOT NULL,  time_to_bathroom int NOT NULL, time_on_bathroom int NOT NULL,  time_from_bathroom int NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id));
+CREATE TABLE blc.main_data (event_id INT KEY AUTO_INCREMENT NOT NULL, user_id INT UNSIGNED NOT NULL, session_id int NOT NULL,start_time VARCHAR(30) NOT NULL,  time_to_bathroom VARCHAR(30) NOT NULL, time_on_bathroom VARCHAR(30) NOT NULL,  time_from_bathroom VARCHAR(30) NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id));
 
 
 CREATE TABLE blc.dump_data

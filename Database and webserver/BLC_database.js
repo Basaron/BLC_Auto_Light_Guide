@@ -142,7 +142,7 @@ function insert_data_dump_table(obj){
 	var start_time = obj.timestamp
 	var user_device_id = obj.sensorId
 	var event = obj.description
-	var device_id = get_device_id(user_id, user_device_id)
+	var device_id = user_device_id
 
 	console.log("Device_id =", device_id)
 	
