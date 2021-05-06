@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>
+          BLC data view
+        </title>
+        <link rel="stylesheet" href="/assets/main.css">
+      </head>
+      
+    <body>
+        <div class="table-data" >
+            <table border="1" border-collapse: collapse>
+                <tr>
+                    <th>Time</th>
+                    <th>Location</th>
+                    <th>Event</th>
+                </tr>
+
+                <tr>            
+                <%
+                if(userData.length != 0){
+                    var i = 1;
+                    userData.reverse()
+                    userData.forEach(function(data){ %>
+                        <td> <%=data.start_time %></td>
+                        <td> <%=data.device_location %></td>
+                        <td> <%=data.event %></td>
+                </tr>
+                        <% i++}) %>    
+             <% }   else {%>
+                <tr>
+                    <td colspan="7">No Data Found</td>
+                </tr>
+                <%  } %>
+            </table>
+        </div>
+        <div class="data">
+            <button style="top:-100px" onclick="window.location.href='/homepage'">Go to homepage</button><br>
+        </div>
+
+    </body>    
+</html>
+<br>
+
