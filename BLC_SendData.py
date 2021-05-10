@@ -27,7 +27,7 @@ class publisher:
         event.description = msg
         event.event_type = HEUCOD.HeucodEventType.BedOccupancyEvent
 
-        publish.single(hostname="192.168.0.15",
+        publish.single(hostname="192.168.2.204",
                         port = 1883,
                         topic=f"server/main_table", 
                         payload = event.to_json())
@@ -47,7 +47,7 @@ class publisher:
         print(event.to_json())
         
         
-        publish.single(hostname="192.168.0.15",
+        publish.single(hostname="192.168.2.204",
                         port = 1883,
                         topic=f"server/dump_table", 
                         payload = event.to_json())

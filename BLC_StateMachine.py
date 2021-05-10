@@ -29,8 +29,8 @@ class StateMachine:
         self.awake =0
         self.start_to_bath =0
         self.finish_to_bath =0
-        self.start_in_Bath =0
-        self.finish_in_Bath  =0
+        self.start_in_bath =0
+        self.finish_in_bath  =0
         self.start_from_bath =0
         self.finish_from_bath =0
         
@@ -43,7 +43,7 @@ class StateMachine:
         self.machine.add_transition('room1_to_room2', 'Room1','Room2', after='fun_room1_to_room2')
         self.machine.add_transition('room1_to_bed', 'Room1', 'Bedroom', after='fun_room1_to_bed')
 
-        self.machine.add_transition('room2_to_bath', 'Room2', 'Bedroom', after='fun_room2_to_bath')
+        self.machine.add_transition('room2_to_bath', 'Room2', 'Bathroom', after='fun_room2_to_bath')
         self.machine.add_transition('room2_to_room1', 'Room2', 'Room1', after='fun_room2_to_room1')
 
         self.machine.add_transition('bath_to_room2', 'Bathroom', 'Room2', after='fun_bath_to_room2')
@@ -76,10 +76,9 @@ class StateMachine:
             print("Bathroom")
             
             if device_id =="PIR3" and occupancy and not self.Been_to_bath:
-                self.Been_to_bath = True
-                self.pub.publishData_dump(1,    self.sesion,       4,      "Movement detected")
-            elif device_id =="PIR1" and occupancy and self.Been_to_bath:
-                self.bath_to_room1()
+                self.fun_in_bath()
+            elif device_id =="PIR2" and occupancy and self.Been_to_bath:
+                self.bath_to_room2()
             
         
         else:
@@ -106,9 +105,13 @@ class StateMachine:
         self.__z2m_client.change_state(device.ledNext.id_, "ON")
         self.__z2m_client.change_state(device.ledOwn.id_, "ON")
         self.__z2m_client.change_state(device.ledPre.id_, "OFF")
+        self.pub.publishData_dump(1,    self.sesion,       3,      "Movement detected")
+        
+    def fun_in_bath(self):
         self.finish_to_bath = time.time()#datetime.now().replace(microsecond=0)
         self.start_in_bath = time.time()#datetime.now().replace(microsecond=0)
-        self.pub.publishData_dump(1,    self.sesion,       3,      "Movement detected")
+        self.Been_to_bath = True
+        self.pub.publishData_dump(1,    self.sesion,       4,      "Movement detected")
 
 
     def fun_bath_to_room2(self):
@@ -139,10 +142,9 @@ class StateMachine:
         self.__z2m_client.change_state(device.ledOwn.id_, "OFF")
         self.__z2m_client.change_state(device.ledNext.id_, "OFF")
         
-        
         to_bathroom = int(self.finish_to_bath - self.start_to_bath)
         #to_bathroom.strftime("%T")
-        on_bathroom = int(self.finish_in_Bath - self.start_in_Bath)
+        on_bathroom = int(self.finish_in_bath - self.start_in_bath)
         #on_bathroom.strftime("%T")
         from_bathroom = int(self.finish_from_bath - self.start_from_bath)
         #from_bathroom.strftime("%T")
