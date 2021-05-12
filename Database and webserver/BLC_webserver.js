@@ -72,7 +72,7 @@ app.get('/view', (req, res) => {
 app.get('/dump', (req, res) => {
 	if (!req.session.loggedin) res.redirect('/') //If not logged in
 	else{
-		var query = "SELECT dump_data.start_time, dump_data.event, devices.device_location FROM dump_data INNER JOIN devices ON dump_data.device_id=devices.device_id WHERE dump_data.user_id = ?;"
+		var query = "SELECT dump_data.start_time, dump_data.event, devices.device_location FROM dump_data INNER JOIN devices ON dump_data.device_id=devices.device_id WHERE devices.user_id = ? ORDER BY start_time;"
 		
 		connection.query(query, [req.session.username], (err, rows, fields) => {
 			  if (err) console.log(err)
@@ -86,12 +86,13 @@ app.get('/dump', (req, res) => {
 app.get('/details/:id', (req, res) =>{
 	if (req.session.loggedin){
 	
-	var query = "SELECT dump_data.start_time, dump_data.event, devices.device_location FROM dump_data INNER JOIN devices ON dump_data.device_id=devices.device_id WHERE session_id = ? AND dump_data.user_id = ?;"
+	var query = "SELECT dump_data.start_time, dump_data.event, devices.device_location FROM dump_data INNER JOIN devices ON dump_data.device_id=devices.device_id WHERE session_id = ? AND devices.user_id = ?;"
 	const session_id = req.params.id
 	
 	connection.query(query, [session_id, req.session.username], (err, rows, fields) => {
   		if (err) console.log(err)
 		else{
+				console.log(rows)
 				res.render('details', { title: 'data', userData: rows})
 			}
 		})
