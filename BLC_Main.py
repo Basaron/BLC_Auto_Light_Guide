@@ -8,7 +8,9 @@ if __name__ == "__main__":
     # divece friendly names opt/zig/data/configuration.yaml
     devices_model = Cep2Model()
     devices_model.add([Cep2ZigbeeDevicePir("PIR", "pir0", None ,Cep2ZigbeeDeviceLed("LED", "led0"), Cep2ZigbeeDeviceLed("LED1", "led1")),
-                       Cep2ZigbeeDevicePir("PIR1", "pir1", Cep2ZigbeeDeviceLed("LED", "led0"),Cep2ZigbeeDeviceLed("LED1", "led1"), None),
+                       Cep2ZigbeeDevicePir("PIR1", "pir1", Cep2ZigbeeDeviceLed("LED", "led0"),Cep2ZigbeeDeviceLed("LED1", "led1"), Cep2ZigbeeDeviceLed("LED2", "led2")),
+                       Cep2ZigbeeDevicePir("PIR2", "pir2", Cep2ZigbeeDeviceLed("LED1", "led1"),Cep2ZigbeeDeviceLed("LED2", "led2"), Cep2ZigbeeDeviceLed("LED3", "led3")),
+                       Cep2ZigbeeDevicePir("PIR3", "pir3", None, None, None)
                        ])
 
     # Create a controller and give it the data model that was instantiated.
