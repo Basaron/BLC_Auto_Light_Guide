@@ -20,11 +20,13 @@
           <input type="text" name="username" placeholder="Username" maxlength="64" required>
           <!-- <label> Password:</label><br> -->
           <input type="password" name="password" placeholder="Password" maxlength="64" id="myInput"required>
-
           <!-- Toggle 'Show Password' -->
-            <input type="checkbox" id="eye" onclick="showPW(password)"> 
-            <!-- <label for="eye"> Show password</label> -->
+            <input type="checkbox" id="eye" onclick="showPW(password)">
+            <% if (typeof message !== 'undefined' && message.length > 0) { %>
+              <p><%= message %></p>
+            <% } %>
             <input type="submit" placeholder="Login">
+            
         </form>    
       </div>
     </div>

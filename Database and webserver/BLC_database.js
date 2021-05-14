@@ -106,8 +106,8 @@ function insert_dump(user_id, session_id, start_time, user_device_id, event) { /
 			//value device_id, as i otherwise can't save it to outside of the scope.
 			device_id = rows[0].device_id
 			console.log("THE VALUE IS: ", device_id)
-			var query2 = "INSERT INTO dump_data (user_id, session_id, start_time, device_id, event) VALUES (?, ?, ?, ?, ?)" //TODO: remove user_id
-			connection.query(query2, [user_id, session_id, start_time, device_id, event], (err) =>{
+			var query2 = "INSERT INTO dump_data (session_id, start_time, device_id, event) VALUES (?, ?, ?, ?, ?)" //TODO: remove user_id
+			connection.query(query2, [session_id, start_time, device_id, event], (err) =>{
 				if (err){
 				console.log(err);
 				}

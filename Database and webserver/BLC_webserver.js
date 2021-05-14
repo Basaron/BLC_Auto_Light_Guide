@@ -51,10 +51,6 @@ function createHash(string_input){
 	return hash.digest('hex');
   }
 
-app.get('/', (req, res) => {
-	res.render('login');
-})
-
 app.get('/view', (req, res) => {
 	if (!req.session.loggedin) res.redirect('/') //If not logged in
 	else{
@@ -86,7 +82,7 @@ app.get('/dump', (req, res) => {
 app.get('/details/:id', (req, res) =>{
 	if (req.session.loggedin){
 	
-	var query = "SELECT dump_data.start_time, dump_data.event, devices.device_location FROM dump_data INNER JOIN devices ON dump_data.device_id=devices.device_id WHERE session_id = ? AND devices.user_id = ?;"
+	var query = "SELECT dump_data.start_time, dump_data.event, devices.device_location FROM dump_data INNER JOIN devices ON dump_data.device_id=devices.device_id WHERE session_id = ? AND devices.user_id = ? ORDER BY start_time;"
 	const session_id = req.params.id
 	
 	connection.query(query, [session_id, req.session.username], (err, rows, fields) => {
@@ -126,10 +122,14 @@ app.get('/logout', (req, res) => { //TODO Make this a proper logout with ending 
 	res.redirect('/');
   })
 
+app.get('/', (req, res) => {
+	res.render('login');
+})
+
+
 app.post('/login', (req, res) => {
 	var username = req.body.username
 	var password = createHash(req.body.password)
-	//TODO: make hash of password
 	var query = 'SELECT * FROM users WHERE username = ? AND psw = ?'
 	
 	connection.query(query, [username, password], (err, rows) => {
@@ -148,7 +148,7 @@ app.post('/login', (req, res) => {
 			}
 			else{
 				console.log("Wrong username or password")
-				res.redirect('/')
+				res.render('login', {message: "Wrong username or password"}) //)
 			}
 		}
 	})
@@ -157,6 +157,8 @@ app.post('/login', (req, res) => {
 
 
 //Done TODOS
+
+//TODO: make hash of password
 
 //TODO: Make sessions using cookies, and only make '/' accessible if not logged in. 
 
