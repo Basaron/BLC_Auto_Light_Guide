@@ -1,6 +1,6 @@
 # Welcome to BLC's Automated Ligth Guide!
 
-In here you find the source code of the automated light guide, developed by Blinding Lights Cooporations. 
+In here you find the source code of the automated light guide, developed by Blinding Lights Cooporations. Additionally, there is a walkthrough on how to set up the system, including descriptions on setting up the database, installing the MQTT broker, setting up the automated light guide and more.
 
 
 # Setting up the database and webserver
@@ -33,7 +33,7 @@ In the workbench, choose "Create a new schema" and create one called *blc* with 
 
 ![How to make schema](https://github.com/Biorrith/Software-Teknologi/blob/main/pictures/schema.png)
 
-Now execute the following commands, one at a time:
+Now execute the following commands in a query, one at a time:
 
 ```
 CREATE TABLE blc.devices(
@@ -125,6 +125,6 @@ To connect to the server from other devices on the same LAN, connect via the IPv
 With the specific IPv4 address instead of 'IPv4 address'.
 
 
-# Setting up the automated light guide
+# Setting up the Automated Light Guide
 
 
