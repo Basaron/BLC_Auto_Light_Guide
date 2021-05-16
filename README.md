@@ -33,7 +33,7 @@ In the workbench, choose "Create a new schema" and create one called *blc* with 
 
 ![How to make schema](https://github.com/Biorrith/Software-Teknologi/blob/main/pictures/schema.png)
 
-Now execute the following commands in a query, one at a time:
+Next, execute the following commands in a query to create the tables:
 
 ```
 CREATE TABLE blc.devices(
@@ -44,16 +44,14 @@ CREATE TABLE blc.devices(
 			user_device_id int,
 			PRIMARY KEY (device_id)
 			);
-```
-```
+
 CREATE TABLE blc.users  (
 			user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,  
 		 	username VARCHAR(64) NOT NULL,  
 			psw VARCHAR(64) NOT NULL, 
 			PRIMARY KEY (user_id)
 			);
-```
-```
+
 CREATE TABLE blc.main_data 	
 			(
 			event_id INT KEY AUTO_INCREMENT NOT NULL, 
@@ -65,8 +63,7 @@ CREATE TABLE blc.main_data
 			time_from_bathroom VARCHAR(30) NOT NULL, 
 			FOREIGN KEY (user_id) REFERENCES users(user_id)
 			);
-```
-```
+
 CREATE TABLE blc.dump_data
 			(
 			event_id INT KEY AUTO_INCREMENT NOT NULL, 
