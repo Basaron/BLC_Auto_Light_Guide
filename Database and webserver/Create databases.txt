@@ -42,7 +42,7 @@ CREATE TABLE blc.dump_data
 			start_time VARCHAR(30) NOT NULL,
 			device_id int NOT NULL, 
 			event VARCHAR (255) NOT NULL, 
-			FOREIGN KEY (device_id) REFERENCES devices(device_id), 
+			FOREIGN KEY (device_id) REFERENCES devices(device_id)
 			);
 
 CREATE TABLE blc.dump_data(event_id INT KEY AUTO_INCREMENT NOT NULL,session_id INT NOT NULL,start_time VARCHAR(30) NOT NULL,device_id int NOT NULL, event VARCHAR (255) NOT NULL, FOREIGN KEY (device_id) REFERENCES devices(device_id));

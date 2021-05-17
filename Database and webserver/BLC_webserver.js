@@ -9,12 +9,9 @@ const express = require('express') //For setting up the website
 const bodyParser = require('body-parser') //For getting the input data
 const session = require('express-session');
 
-
-var userID //TODO: find a better way to store userID (perhaps with sessions?)
 var crypto = require('crypto')
 var mysql = require('mysql'); //Connecting to the database
 
-const { connect } = require('mqtt');
 var app = express()
 app.use(bodyParser.urlencoded({extended:true}))
 app.use('/assets', express.static('assets')); //To access the CSS style
@@ -44,6 +41,7 @@ var connection = mysql.createConnection({
 	password: "BLC",
 	database: "BLC"
 })
+
 
 function createHash(string_input){
 	const hash = crypto.createHash('sha256')
