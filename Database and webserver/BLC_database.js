@@ -95,17 +95,19 @@ function insert_main(user_id, session_id, start_time, time_to_bathroom, visit_le
 
 function insert_dump(user_id, session_id, start_time, user_device_id, event) { //topic, message_str, packet
 
-	//Make the query.
+	//Make the query. The query gets the actual device_id by using the user and the users belief of the device_id
 	query = "SELECT device_id FROM devices WHERE user_id = ? AND user_device_id = ?;"
 	connection.query(query, [user_id, user_device_id], (err, rows) => {
 		if(err){
 			console.log(err)
 		} 
 		else{
+			//Nested query calls seems kinda stupid, but the scopes in javascript are weird, and its the only way i could use the
+			//value device_id, as i otherwise can't save it to outside of the scope.
 			device_id = rows[0].device_id
 			console.log("THE VALUE IS: ", device_id)
-			var query2 = "INSERT INTO dump_data (user_id, session_id, start_time, device_id, event) VALUES (?, ?, ?, ?, ?)"
-			connection.query(query2, [user_id, session_id, start_time, device_id, event], (err) =>{
+			var query2 = "INSERT INTO dump_data (session_id, start_time, device_id, event) VALUES (?, ?, ?, ?, ?)" //TODO: remove user_id
+			connection.query(query2, [session_id, start_time, device_id, event], (err) =>{
 				if (err){
 				console.log(err);
 				}

@@ -51,11 +51,17 @@ tr:nth-child(odd) {
     margin: 0 auto;
 }
 
-.login-form h1 {
+.login-form h1{
     text-align: center;
     color: #4d4d4d;
     font-size: 24px;
     padding: 20px 0 20px 0;
+}
+
+.login-form p{
+    text-align: center;
+    color: #000000;
+    font-family: Tahoma, Geneva, sans-serif;
 }
 
 .login-form input[type="password"],
