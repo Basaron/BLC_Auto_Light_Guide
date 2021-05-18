@@ -2,22 +2,22 @@ from dataclasses import dataclass
 from typing import List, Optional, Union
 
 @dataclass
-class Cep2ZigbeeDeviceLed:
+class BLCZigbeeDeviceLed:
     id_: str
     type_: str
 
 @dataclass
-class Cep2ZigbeeDevicePir:
+class BLCZigbeeDevicePir:
 
     id_: str
     type_: str
-    ledPre: Cep2ZigbeeDeviceLed
-    ledOwn: Cep2ZigbeeDeviceLed
-    ledNext: Cep2ZigbeeDeviceLed
+    ledPre: BLCZigbeeDeviceLed
+    ledOwn: BLCZigbeeDeviceLed
+    ledNext: BLCZigbeeDeviceLed
 
 
 
-class Cep2Model:
+class BLCModel:
 
     """ The model class is responsible for representing and managing access to data. In this case,
     the class is a basic dictionary that uses the devices's ID as key to reference the device
@@ -31,38 +31,38 @@ class Cep2Model:
     """ For findig the device to resive data"""
     
     @property
-    def devices_list(self) -> List[Cep2ZigbeeDevicePir]:
+    def devices_list(self) -> List[BLCZigbeeDevicePir]:
         return list(self.__devices.values())
 
     @property
-    def sensors_list(self) -> List[Cep2ZigbeeDevicePir]:
+    def sensors_list(self) -> List[BLCZigbeeDevicePir]:
         return list(filter(lambda s: s.type_ in {"pir"},
                            self.__devices.values()))
 
-    def add(self, device: Union[Cep2ZigbeeDevicePir, List[Cep2ZigbeeDevicePir]]) -> None:
+    def add(self, device: Union[BLCZigbeeDevicePir, List[BLCZigbeeDevicePir]]) -> None:
         """ Add a new devices to the database.
 
         Args:
-            device (Union[Cep2ZigbeeDevicePir, List[Cep2ZigbeeDevicePir]]): a device object, or a list of
+            device (Union[BLCZigbeeDevicePir, List[BLCZigbeeDevicePir]]): a device object, or a list of
             device objects to store.
         """
-        # If the value given as argument is a Cep2ZigbeeDevicePir, then create a list with it so that
+        # If the value given as argument is a BLCZigbeeDevicePir, then create a list with it so that
         # later only a list of objects has to be inserted.
-        list_devices = [device] if isinstance(device, Cep2ZigbeeDevicePir)\
+        list_devices = [device] if isinstance(device, BLCZigbeeDevicePir)\
             else device
 
         # Insert list of devices, where the device ID is the key of the dictionary.
         for s in list_devices:
             self.__devices[s.id_] = s
 
-    def find(self, device_id: str) -> Optional[Cep2ZigbeeDevicePir]:
+    def find(self, device_id: str) -> Optional[BLCZigbeeDevicePir]:
         """ Retrieve a device from the database by its ID.
 
         Args:
             device_id (str): ID of the device to retrieve.
 
         Returns:
-            Optional[Cep2ZigbeeDevicePir]: a device. If the device is not stored, then None is returned
+            Optional[BLCZigbeeDevicePir]: a device. If the device is not stored, then None is returned
         """
         # Use the bult-in function filter to get the device. The output of filter is a filter object
         # that is then casted to a list. The, the first result, if any, is returned; otherwise None.

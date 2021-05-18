@@ -10,7 +10,7 @@ from paho.mqtt.client import Client as MqttClient, MQTTMessage
 from paho.mqtt import publish, subscribe
 
 
-class Cep2Zigbee2mqttMessageType(Enum):
+class BLCZigbee2mqttMessageType(Enum):
     """ Enumeration with the type of messages that zigbee2mqtt publishes.
     """
 
@@ -30,7 +30,7 @@ class Cep2Zigbee2mqttMessageType(Enum):
 
 
 @dataclass
-class Cep2Zigbee2mqttMessage:
+class BLCZigbee2mqttMessage:
     """ This class represents a zigbee2mqtt message. The fields vary with the topic, so not all
     attributes might have a value. If the message does not have a field, its value defaults to None.
     """
@@ -38,7 +38,7 @@ class Cep2Zigbee2mqttMessage:
     # A note about dataclasses: this is a Python feature that allows to simplify the implementation
     # of a class by only declaring its attributes (or fields) and respective types. In the
     # background, an initializer is created that receives as arguments the declared attributes. This
-    # can be observed in the parse() method, where instances of Cep2Zigbee2mqttMessage are created
+    # can be observed in the parse() method, where instances of BLCZigbee2mqttMessage are created
     # with varying arguments, depending on the topic and message received.
     # If a field is not declared with a default value, then it is mandatory in the initializer;
     # otherwise, a value does not need to be given as argument. For this class, the topic and type_
@@ -46,7 +46,7 @@ class Cep2Zigbee2mqttMessage:
     # initializer. All other values are optional.
 
     topic: str
-    type_: Cep2Zigbee2mqttMessageType
+    type_: BLCZigbee2mqttMessageType
     data: Any = None
     event: Any = None
     message: Any = None
@@ -55,7 +55,7 @@ class Cep2Zigbee2mqttMessage:
     state: str = None
 
     @classmethod
-    def parse(cls, topic: str, message: str) -> Cep2Zigbee2mqttMessage:
+    def parse(cls, topic: str, message: str) -> BLCZigbee2mqttMessage:
         """ Parse a zigbee2mqtt JSON message, based on the received topic.
 
         Args:
@@ -63,10 +63,10 @@ class Cep2Zigbee2mqttMessage:
             message (str): JSON message that will be parsed
 
         Returns:
-            Cep2Zigbee2mqttMessage: an object with the parsed message values
+            BLCZigbee2mqttMessage: an object with the parsed message values
         """
         # A note about class methods: these methods can be used to instantiate the class where it is
-        # declared. In this case, this method returns an instance of Cep2Zigbee2mqttMessage based on
+        # declared. In this case, this method returns an instance of BLCZigbee2mqttMessage based on
         # the topic and message that are given as arguments.
         # In Python, like other object oriented languages, a method can be an instance method
         # (called from an object), a static method (called from the class), or a class method
@@ -78,12 +78,12 @@ class Cep2Zigbee2mqttMessage:
         #     - Factory design pattern: https://refactoring.guru/design-patterns/factory-method
 
         if topic == "zigbee2mqtt/bridge/state":
-            instance = cls(type_=Cep2Zigbee2mqttMessageType.BRIDGE_STATE,
+            instance = cls(type_=BLCZigbee2mqttMessageType.BRIDGE_STATE,
                            topic=topic,
                            state=message)
         elif topic in ["zigbee2mqtt/bridge/event", "zigbee2mqtt/bridge/logging"]:
-            type_ = {"zigbee2mqtt/bridge/event": Cep2Zigbee2mqttMessageType.BRIDGE_EVENT,
-                     "zigbee2mqtt/bridge/log": Cep2Zigbee2mqttMessageType.BRIDGE_LOG}.get(topic)
+            type_ = {"zigbee2mqtt/bridge/event": BLCZigbee2mqttMessageType.BRIDGE_EVENT,
+                     "zigbee2mqtt/bridge/log": BLCZigbee2mqttMessageType.BRIDGE_LOG}.get(topic)
             message_json = json.loads(message)
             instance = cls(type_=type_,
                            topic=topic,
@@ -98,14 +98,14 @@ class Cep2Zigbee2mqttMessage:
                        "zigbee2mqtt/bridge/response/health_check"]:
             instance = None
         else:
-            instance = cls(type_=Cep2Zigbee2mqttMessageType.DEVICE_EVENT,
+            instance = cls(type_=BLCZigbee2mqttMessageType.DEVICE_EVENT,
                            topic=topic,
                            event=json.loads(message))
 
         return instance
 
 
-class Cep2Zigbee2mqttClient:
+class BLCZigbee2mqttClient:
     """ This class implements a simple zigbee2mqtt client.
 
     By default it subscribes to all events of the default topic (zigbee2mqtt/#). No methods for
@@ -123,7 +123,7 @@ class Cep2Zigbee2mqttClient:
 
     def __init__(self,
                  host: str,
-                 on_message_clbk: Callable[[Optional[Cep2Zigbee2mqttMessage]], None],
+                 on_message_clbk: Callable[[Optional[BLCZigbee2mqttMessage]], None],
                  port: int = 1883,
                  topics: List[str] = [ROOT_TOPIC]):
         """ Class initializer where the MQTT broker's host and port can be set, the list of topics
@@ -290,5 +290,5 @@ class Cep2Zigbee2mqttClient:
                 # inside the try does not throws and exception.
                 # The decode() transforms a byte array into a string, following the utf-8 encoding.
                 if message:
-                    self.__on_message_clbk(Cep2Zigbee2mqttMessage.parse(message.topic,
+                    self.__on_message_clbk(BLCZigbee2mqttMessage.parse(message.topic,
                                                                         message.payload.decode("utf-8")))

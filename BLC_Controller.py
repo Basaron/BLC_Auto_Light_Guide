@@ -1,9 +1,10 @@
-from BLC_Model import Cep2Model
+from BLC_Model import BLCModel
 from BLC_StateMachine import StateMachine
-from BLC_Zigbee2mqttClient import (Cep2Zigbee2mqttClient,
-                                   Cep2Zigbee2mqttMessage, Cep2Zigbee2mqttMessageType)
+from BLC_Zigbee2mqttClient import (BLCZigbee2mqttClient,
+                                   BLCZigbee2mqttMessage, BLCZigbee2mqttMessageType)
+from datetime import datetime
 
-class Cep2Controller:
+class BLCController:
     HTTP_HOST = "http://localhost:8000"
     MQTT_BROKER_HOST = "localhost"
     MQTT_BROKER_PORT = 1883
@@ -14,16 +15,16 @@ class Cep2Controller:
     and send an event to a remote HTTP server.
     """
     
-    def __init__(self, devices_model: Cep2Model) -> None:
+    def __init__(self, devices_model: BLCModel) -> None:
         """ Class initializer. The actuator and monitor devices are loaded (filtered) only when the
         class is instantiated. If the database changes, this is not reflected.
 
         Args:
-            devices_model (Cep2Model): the model that represents the data of this application
+            devices_model (BLCModel): the model that represents the data of this application
         """
         
         self.__devices_model = devices_model
-        self.__z2m_client = Cep2Zigbee2mqttClient(host=self.MQTT_BROKER_HOST,
+        self.__z2m_client = BLCZigbee2mqttClient(host=self.MQTT_BROKER_HOST,
                                                   port=self.MQTT_BROKER_PORT,
                                                   on_message_clbk=self.__zigbee2mqtt_event_received)
 
@@ -41,46 +42,52 @@ class Cep2Controller:
         self.__z2m_client.change_state(device.ledOwn.id_, "OFF")
         self.__z2m_client.change_state(device.ledNext.id_, "OFF")
 
+        self.currecntTime = datetime.datetime.now()
+        self.today10pm = self.currecntTime.replace(hour=22, minute=0, second=0, microsecond=0)
+        self.today9am = self.currecntTime.replace(hour=9, minute=0, second=0, microsecond=0)
+
     def stop(self) -> None:
         """ Stop listening for zigbee2mqtt events.
         """
         self.__z2m_client.disconnect()
 
-    def __zigbee2mqtt_event_received(self, message: Cep2Zigbee2mqttMessage) -> None:
+    def __zigbee2mqtt_event_received(self, message: BLCZigbee2mqttMessage) -> None:
         """ Process an event received from zigbee2mqtt. This function given as callback to
-        Cep2Zigbee2mqttClient, which is then called when a message from zigbee2mqtt is received.
+        BLCZigbee2mqttClient, which is then called when a message from zigbee2mqtt is received.
 
         Args:
-            message (Cep2Zigbee2mqttMessage): an object with the message received from zigbee2mqtt
+            message (BLCZigbee2mqttMessage): an object with the message received from zigbee2mqtt
         """
-        
-        # If message is None (it wasn't parsed), then don't do anything.
-        if not message:
-            return
+        self.currecntTime = datetime.datetime.now()
 
-        #print(f"zigbee2mqtt event received on topic {message.topic}: {message.data}")
+        if self.currecntTime > self.today10pm and self.currecntTime < self.today9am:
+            # If message is None (it wasn't parsed), then don't do anything.
+            if not message:
+                return
 
-        # If the message is not a device event, then don't do anything.
-        if message.type_ != Cep2Zigbee2mqttMessageType.DEVICE_EVENT:
-            return
+            #print(f"zigbee2mqtt event received on topic {message.topic}: {message.data}")
 
-        # Parse the topic to retreive the device ID. If the topic only has one level, don't do
-        # anything.
-        tokens = message.topic.split("/")
-        if len(tokens) <= 1:
-            return
+            # If the message is not a device event, then don't do anything.
+            if message.type_ != BLCZigbee2mqttMessageType.DEVICE_EVENT:
+                return
 
-        # Retrieve the device ID from the topic.
-        device_id = tokens[1]
+            # Parse the topic to retreive the device ID. If the topic only has one level, don't do
+            # anything.
+            tokens = message.topic.split("/")
+            if len(tokens) <= 1:
+                return
 
-        # If the device ID is known, then process the device event and send a message to the remote
-        # web server.
-        device = self.__devices_model.find(device_id)
+            # Retrieve the device ID from the topic.
+            device_id = tokens[1]
 
-        if device:
-            try:
-                occupancy = message.event["occupancy"]
-            except KeyError:
-                pass
-            else:
-                self.stateMachine.trigger(occupancy, device_id)
+            # If the device ID is known, then process the device event and send a message to the remote
+            # web server.
+            device = self.__devices_model.find(device_id)
+
+            if device:
+                try:
+                    occupancy = message.event["occupancy"]
+                except KeyError:
+                    pass
+                else:
+                    self.stateMachine.trigger(occupancy, device_id)

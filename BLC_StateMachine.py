@@ -9,13 +9,9 @@ import time
 
 class StateMachine:
     states = ['Bedroom', 'Room1', 'Room2', 'Bathroom']
-    
-
 
     def __init__(self, devices_model, z2m_client):
-        
-        
-
+    
         self.machine = Machine(
             model=self,
             states=self.states,

@@ -1,20 +1,20 @@
 from time import sleep
-from BLC_Controller import Cep2Controller
-from BLC_Model import Cep2Model, Cep2ZigbeeDevicePir, Cep2ZigbeeDeviceLed
+from BLC_Controller import BLCController
+from BLC_Model import BLCModel, BLCZigbeeDevicePir, BLCZigbeeDeviceLed
 
 
 if __name__ == "__main__":
     # Create a data model and add a list of known Zigbee devices.
     # divece friendly names opt/zig/data/configuration.yaml
-    devices_model = Cep2Model()
-    devices_model.add([Cep2ZigbeeDevicePir("PIR", "pir0", None ,Cep2ZigbeeDeviceLed("LED", "led0"), Cep2ZigbeeDeviceLed("LED1", "led1")),
-                       Cep2ZigbeeDevicePir("PIR1", "pir1", Cep2ZigbeeDeviceLed("LED", "led0"),Cep2ZigbeeDeviceLed("LED1", "led1"), Cep2ZigbeeDeviceLed("LED2", "led2")),
-                       Cep2ZigbeeDevicePir("PIR2", "pir2", Cep2ZigbeeDeviceLed("LED1", "led1"),Cep2ZigbeeDeviceLed("LED2", "led2"), Cep2ZigbeeDeviceLed("LED3", "led3")),
-                       Cep2ZigbeeDevicePir("PIR3", "pir3", None, None, None)
+    devices_model = BLCModel()
+    devices_model.add([BLCZigbeeDevicePir("PIR", "pir0", None ,BLCZigbeeDeviceLed("LED", "led0"), BLCZigbeeDeviceLed("LED1", "led1")),
+                       BLCZigbeeDevicePir("PIR1", "pir1", BLCZigbeeDeviceLed("LED", "led0"),BLCZigbeeDeviceLed("LED1", "led1"), BLCZigbeeDeviceLed("LED2", "led2")),
+                       BLCZigbeeDevicePir("PIR2", "pir2", BLCZigbeeDeviceLed("LED1", "led1"),BLCZigbeeDeviceLed("LED2", "led2"), BLCZigbeeDeviceLed("LED3", "led3")),
+                       BLCZigbeeDevicePir("PIR3", "pir3", None, None, None)
                        ])
 
     # Create a controller and give it the data model that was instantiated.
-    controller = Cep2Controller(devices_model)
+    controller = BLCController(devices_model)
     controller.start()
 
     print("Waiting for events...")
