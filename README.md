@@ -85,13 +85,13 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'BLC'
 ```
 The last command, ALTER USER, sets the root password of the user. If you chose another password earlier, you have to alter this in the command, too. Now that all tables are created, everything should be set and ready to go. However, inserting users and devices into the system must be done manually. And example of inserting such follows:
 ```
-INSERT INTO users   (username, psw) VALUES ("BLC", "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3");
+INSERT INTO blc.users (username, psw) VALUES ("BLC", "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3");
 ```
 Here, you insert the username BLC and the password 123. However, since the login is running with SHA256 hash, when inserting the password, you must insert the encrypted version of the password. You can use [this site](https://emn178.github.io/online-tools/sha256.html) to do so.
 An example of inserting devices:
 
 ```
-INSERT INTO devices (user_id, device_type, device_location, user_device_id) VALUES (1, "PIR", "Bedroom", 1);
+INSERT INTO blc.devices (user_id, device_type, device_location, user_device_id) VALUES (1, "PIR", "Bedroom", 1);
 ```
 
 Here, user_id, device type and location are self explanatory. The user device ID is the device ID used on the respective users pi. For this, bedroom should always be 1, and the bathrooom always be the last.
