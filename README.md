@@ -87,6 +87,7 @@ INSERT INTO devices (device_type, device_location, user_device_id) VALUES ("PIR"
 Here, the device type and location are straight forward. The user device ID is the device ID used on the respective users pi. For this, bedroom should always be 1, and the bathrooom always be the last.
 
 **MQTT broker**
+
 In order to get the data from the Pi, a MQTT broker is required to be running on the host machine. There are numerous turtorials online on how to download and install such. For Windows, go to [this site](https://mosquitto.org/download/) to download the broker. For Linux, run the following command
 
 	$ install mosquitto mosquitto-clients
