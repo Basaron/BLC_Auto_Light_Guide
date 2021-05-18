@@ -155,11 +155,3 @@ class StateMachine:
         
         self.Been_to_bath = False
         
-
-    
- 
-
-       
-
-    
-        
