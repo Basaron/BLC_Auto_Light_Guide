@@ -10,10 +10,16 @@ First, install node.js - [Download link](https://nodejs.org/en/), take the left 
 Make sure you have version 6.X:
 
 	$ npm -v
+	
+	
 
 Download the zip files, unzip and navigate to the *Database and webserver* folder in a console.
 
-From the folder, the needed libraries should already by set and ready to go, located in the *node_modules* folder. If, for some unknown reason, this is now the case, you can install all the libraries with the following command line:
+From the folder, the needed libraries should already by set and ready to go, located in the *node_modules* folder, except for express. Install express with the following command, which should be executed in the *Database and webserver* directory:
+	
+	$ npm install express
+
+If, for some unknown reason, the libraries gives an error, you can install all the libraries with the following command line in the *node_modules* directory:
 
 	$ npm install body-parser express-ejs-layouts express-session js-sha256 ejs mysql mqtt
 
