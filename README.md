@@ -10,10 +10,16 @@ First, install node.js - [Download link](https://nodejs.org/en/), take the left 
 Make sure you have version 6.X:
 
 	$ npm -v
+	
+	
 
 Download the zip files, unzip and navigate to the *Database and webserver* folder in a console.
 
-From the folder, the needed libraries should already by set and ready to go, located in the *node_modules* folder. If, for some unknown reason, this is now the case, you can install all the libraries with the following command line:
+From the folder, the needed libraries should already by set and ready to go, located in the *node_modules* folder, except for express. Install express with the following command, which should be executed in the *Database and webserver* directory:
+	
+	$ npm install express
+
+If, for some unknown reason, the libraries gives an error, you can install all the libraries with the following command line in the *node_modules* directory:
 
 	$ npm install body-parser express-ejs-layouts express-session js-sha256 ejs mysql mqtt
 
@@ -74,20 +80,25 @@ CREATE TABLE blc.dump_data
 			event VARCHAR (255) NOT NULL, 
 			FOREIGN KEY (device_id) REFERENCES devices(device_id)
 			);
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'BLC'
 ```
-Now that all tables are created, everything should be set and ready to go. However, inserting users and devices into the system must be done manually. And example of inserting such follows:
+The last command, ALTER USER, sets the root password of the user. If you chose another password earlier, you have to alter this in the command, too. Now that all tables are created, everything should be set and ready to go. However, inserting users and devices into the system must be done manually. And example of inserting such follows:
 ```
-INSERT INTO users   (username, psw) VALUES ("BLC", "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3");
+INSERT INTO blc.users (username, psw) VALUES ("BLC", "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3");
 ```
 Here, you insert the username BLC and the password 123. However, since the login is running with SHA256 hash, when inserting the password, you must insert the encrypted version of the password. You can use [this site](https://emn178.github.io/online-tools/sha256.html) to do so.
 An example of inserting devices:
+
 ```
-INSERT INTO devices (device_type, device_location, user_device_id) VALUES ("PIR", "Bedroom", 1);
+INSERT INTO blc.devices (user_id, device_type, device_location, user_device_id) VALUES (1, "PIR", "Bedroom", 1);
 ```
-Here, the device type and location are straight forward. The user device ID is the device ID used on the respective users pi. For this, bedroom should always be 1, and the bathrooom always be the last.
+
+Here, user_id, device type and location are self explanatory. The user device ID is the device ID used on the respective users pi. For this, bedroom should always be 1, and the bathrooom always be the last.
 
 **MQTT broker**
-In order to get the data from the Pi, a MQTT broker is required to be running on the host machine. There are numerous turtorials online on how to download and install such. For Windows, go to [this site](https://mosquitto.org/download/) to download the broker. For Linux, run the following command
+
+In order to get the data from the Pi, a MQTT broker is required to be running on the host machine. There are numerous tutorials online on how to download and install such. For Windows, go to [this site](https://mosquitto.org/download/) to download the broker. For Linux, run the following command
 
 	$ install mosquitto mosquitto-clients
 
