@@ -33,7 +33,7 @@ In the workbench, choose "Create a new schema" and create one called *blc* with 
 
 ![How to make schema](https://github.com/Biorrith/Software-Teknologi/blob/main/pictures/schema.png)
 
-Next, create a new SQL tab ![How to make new SQL tab](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/Pictures/query.png):
+Next, create a new SQL tab: ![How to make new SQL tab](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/Pictures/query.png):
 In the tab, insert and execute the following query, by clicking the 'lightning' button:
 
 ```
