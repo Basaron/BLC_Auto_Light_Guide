@@ -1,13 +1,11 @@
-//TODO: Throw errors to make the code not crash when uploading
 
-//TODO: make comments
-
-//Load the server using express
-var mysql = require('mysql'); 
+//Load the server using express 
+//Libraries
+var mysql = require('mysql'); //The database library
 var mqtt = require('mqtt'); //For connecting to the broker
 var client = mqtt.connect('mqtt:localhost:1883') //Connect to the local broker on standard port
 
-//Creating the mySQL connection for the database on port 3306 on localhost, with the user root. 
+//Creating the mySQL connection for the database on port 3306, localhost, with the user root. 
 var connection = mysql.createConnection({
 	multipleStatements: true,
     port: '3306',
@@ -174,3 +172,5 @@ function split_data_dump (obj){
 //TODO: tighten up the code
 
 //TODO: Make a readme on how to setup MySQL
+
+//TODO: make comments
