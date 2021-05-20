@@ -62,3 +62,6 @@ class publisher:
                         payload = event.to_json())
 
 
+Code snippets for webserver:
+
+
