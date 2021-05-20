@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 from typing import List, Optional, Union
 
+#Dataclass for the LED, which holds information about its type and ID for communicating with the zigbee device
 @dataclass
 class BLCZigbeeDeviceLed:
     id_: str
     type_: str
 
+#Dataclass for the PIR motion sensor. Same principle as for the LED with type and ID, but there are also three LED devices, which describes the previous LED, the next LED and the current LED in the corresponding rooms 0 
 @dataclass
 class BLCZigbeeDevicePir:
 
@@ -28,8 +30,7 @@ class BLCModel:
     def __init__(self):
         self.__devices = {}
 
-    """ For findig the device to resive data"""
-    
+    """ For finding the device to receive data """
     @property
     def devices_list(self) -> List[BLCZigbeeDevicePir]:
         return list(self.__devices.values())

@@ -51,23 +51,4 @@ class publisher:
                         port = 1883,
                         topic=f"server/dump_table", 
                         payload = event.to_json())
-        
-"""
-if __name__ == "__main__":
-    pub = publisher()
-    #                    user  session  device  msg
-    pub.publishData_dump(2,    1,       1,      "Movement detected")
     
-    pub.publishData_dump(1,    1,       2,      "Movement detected")
-    pub.publishData_dump(1,    1,       3,      "Movement detected")
-    pub.publishData_dump(1,    1,       4,      "Movement detected")
-    pub.publishData_dump(1,    1,       5,      "Movement detected")
-    pub.publishData_dump(1,    1,       4,      "Movement detected")
-    pub.publishData_dump(1,    1,       3,      "Movement detected")
-    pub.publishData_dump(1,    1,       2,      "Movement detected")
-    pub.publishData_dump(1,    1,       1,      "Movement detected")
-
-    #                    patient session to_bathroom visit len from_bathroom, msg
-    pub.publishData_main(1,      1,      15,         10,       15,            "User went to bathroom and back to bed")
-    
-"""    
