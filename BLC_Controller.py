@@ -8,7 +8,10 @@ class BLCController:
     HTTP_HOST = "http://localhost:8000"
     MQTT_BROKER_HOST = "localhost"
     MQTT_BROKER_PORT = 1883
-
+    
+    
+    
+    
     """ The controller is responsible for managing events received from zigbee2mqtt and handle them.
     By handle them it can be process, store and communicate with other parts of the system. In this
     case, the class listens for zigbee2mqtt events, processes them (turn on another Zigbee device)
@@ -42,9 +45,7 @@ class BLCController:
         self.__z2m_client.change_state(device.ledOwn.id_, "OFF")
         self.__z2m_client.change_state(device.ledNext.id_, "OFF")
 
-        self.currecntTime = datetime.datetime.now()
-        self.today10pm = self.currecntTime.replace(hour=22, minute=0, second=0, microsecond=0)
-        self.today9am = self.currecntTime.replace(hour=9, minute=0, second=0, microsecond=0)
+        
 
     def stop(self) -> None:
         """ Stop listening for zigbee2mqtt events.
@@ -58,9 +59,12 @@ class BLCController:
         Args:
             message (BLCZigbee2mqttMessage): an object with the message received from zigbee2mqtt
         """
-        self.currecntTime = datetime.datetime.now()
+        
+        currecntTime = datetime.now()
+        today10pm = currecntTime.replace(hour=22, minute=0, second=0, microsecond=0)
+        today9am = currecntTime.replace(hour=9, minute=0, second=0, microsecond=0)
 
-        if self.currecntTime > self.today10pm and self.currecntTime < self.today9am:
+        if currecntTime > today10pm or currecntTime < today9am:
             # If message is None (it wasn't parsed), then don't do anything.
             if not message:
                 return
