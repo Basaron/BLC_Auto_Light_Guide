@@ -100,7 +100,7 @@ class StateMachine:
         self.__z2m_client.change_state(device.ledOwn.id_, "ON")                             #Changing the state of the LED in the room, so it is now on 
         self.__z2m_client.change_state(device.ledNext.id_, "ON")                            #Changing the state of the LED in the next room, so it is now off
         self.awake = datetime.now().strftime("%D %T") #Format: date - current time          #Gets the current time 
-        self.start_to_bath = time.time()#datetime.now().replace(microsecond=0)              #Keeps track of the time during the transition 
+        self.start_to_bath = time.time()                                                    #Keeps track of the time during the transition 
         self.pub.publishData_dump(1,    self.sesion,       1,      "Movement detected")     #Publishing data to the database (occupancy message)
 
     def fun_room1_to_room2(self):
@@ -119,8 +119,8 @@ class StateMachine:
     
     #This function determines when the user has been to the bathroom. Here the logic changes for the state machine and now "reverses"
     def fun_in_bath(self):
-        self.finish_to_bath = time.time()#datetime.now().replace(microsecond=0)             
-        self.start_in_bath = time.time()#datetime.now().replace(microsecond=0)
+        self.finish_to_bath = time.time()             
+        self.start_in_bath = time.time()
         self.Been_to_bath = True                                                            #User has been to bathroom.
         self.pub.publishData_dump(1,    self.sesion,       4,      "Movement detected")
 
@@ -130,8 +130,8 @@ class StateMachine:
         self.__z2m_client.change_state(device.ledNext.id_, "OFF")                           #User returns from the bathroom, so the "next" LED is now the previous LED and has to turned off
         self.__z2m_client.change_state(device.ledOwn.id_, "ON")
         self.__z2m_client.change_state(device.ledPre.id_, "ON")
-        self.finish_in_bath = time.time()#datetime.now().replace(microsecond=0)
-        self.start_from_bath = time.time()#datetime.now().replace(microsecond=0)
+        self.finish_in_bath = time.time()
+        self.start_from_bath = time.time()
         self.pub.publishData_dump(1,    self.sesion,       3,      "Movement detected")
 
     def fun_room2_to_room1(self):
@@ -146,7 +146,7 @@ class StateMachine:
         self.__z2m_client.change_state(device.ledOwn.id_, "ON")
         self.__z2m_client.change_state(device.ledNext.id_, "OFF")
         self.pub.publishData_dump(1,    self.sesion,       1,      "Movement detected")
-        self.finish_from_bath = time.time()#datetime.now().replace(microsecond=0)
+        self.finish_from_bath = time.time()
 
     def fun_bed_to_sleep(self):                                     
         device = self.__devices_model.find("PIR")
@@ -155,11 +155,8 @@ class StateMachine:
         
         #Calculating the amount of times the user spends going to the bathroom, being on the bathroom and going back to the bedroom. 
         to_bathroom = int(self.finish_to_bath - self.start_to_bath)            
-        #to_bathroom.strftime("%T")
         on_bathroom = int(self.finish_in_bath - self.start_in_bath)
-        #on_bathroom.strftime("%T")
         from_bathroom = int(self.finish_from_bath - self.start_from_bath)
-        #from_bathroom.strftime("%T")
         
         print("to bathroom = ", to_bathroom, ", on bathroom = ", on_bathroom, " and from bathroom = ", from_bathroom)
         self.pub.publishData_main(1, self.sesion, self.awake, to_bathroom, on_bathroom, from_bathroom, "User went to bathroom and back to bed") #Publishing the time data to the webserver
