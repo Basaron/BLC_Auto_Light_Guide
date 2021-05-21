@@ -35,7 +35,7 @@ client.on('connect', (err) => {
 	client.subscribe(Topic, mqtt_subscribe); //Subscribe to the topic 'server/#'
 })
 
-function mqtt_subscribe(err, granted) {
+function mqtt_subscribe(err) {
     //Simply prints info
 	if (err) {console.log(err);}
 	console.log("Subscribed to " + Topic); 

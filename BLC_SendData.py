@@ -1,16 +1,6 @@
-from __future__ import annotations
-import json
-import signal
 import HEUCOD
-from dataclasses import dataclass
 from datetime import datetime
-from distutils.util import strtobool
-from queue import Empty, Queue
-from threading import Event, Thread
-from typing import Any, Dict, List, Union
-from paho.mqtt.client import Client as MqttClient, MQTTMessage
 from paho.mqtt import publish
-
 
 
 class publisher:
@@ -18,7 +8,8 @@ class publisher:
         event = HEUCOD.HeucodEvent()
         event.patient_id = patient_id
         event.value1 = session_id
-        event.timestamp = timestamp
+        event.timestamp = timestamp #Input timestamp, as it should be from the first movement in the bedroom,
+        #And if we logged it here, it would be the last movement in bedroom
         event.value2 = to_bathroom
         event.length = visit_length        
         event.value3 = from_bathroom
@@ -38,7 +29,7 @@ class publisher:
 
         event.patient_id = patient_id
         event.value1 = session_id
-        event.timestamp = datetime.now().strftime("%D %T")        
+        event.timestamp = datetime.now().strftime("%D %T")#Save here, as its called the same time user is in room.
         event.sensor_id = device_id
         event.description = msg
 

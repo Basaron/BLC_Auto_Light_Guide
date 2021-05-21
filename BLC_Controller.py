@@ -59,12 +59,12 @@ class BLCController:
         """
         
         """Here the timestamp of the of the device is received to make sure that system operates in the valid time interval. This is done using the datetime library"""
-        currecntTime = datetime.now()
-        today10pm = currecntTime.replace(hour=22, minute=0, second=0, microsecond=0)    #Starting time
-        today9am = currecntTime.replace(hour=9, minute=0, second=0, microsecond=0)      #Ending time
+        currentTime = datetime.now()
+        today10pm = currentTime.replace(hour=22, minute=0, second=0, microsecond=0)    #Starting time
+        today9am = currentTime.replace(hour=9, minute=0, second=0, microsecond=0)      #Ending time
 
         #Making sure the time is valid
-        if currecntTime > today10pm or currecntTime < today9am:
+        if currentTime > today10pm or currentTime < today9am:
             # If message is None (it wasn't parsed), then don't do anything.
             if not message:
                 return
