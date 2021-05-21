@@ -48,7 +48,7 @@ CREATE TABLE blc.devices(
 			user_id INT NOT NULL, 
 			device_type VARCHAR(30) NOT NULL, 
 			device_location VARCHAR (30) NOT NULL,
-			user_device_id int,
+			user_device_id int NOT NULL,
 			PRIMARY KEY (device_id)
 			);
 
