@@ -139,42 +139,40 @@ For Setting up the Automated Light Guide, you will need: four GL-MC-001 LEDS, fo
 
 **MQTT**
 
-Use the toturial from the database guide.
+Please refer to the tutorial from the database guide.
 
-**Zigbee2Mqtt**
+**Zigbee2MQTT**
 
-[This is a guide for inbstalling Zigbee2Mqtt on the RasPI](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/References/CEP2%20TUTORIAL%203.pdf)
+To install Zigbee2MQTT, please refer to [this link.](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/References/CEP2%20TUTORIAL%203.pdf). Once installed, connect the devices. 
 
-And for running the code in this the repository we use the userfriendly name change that can be done in the /opt/zigbee2mqtt/data/configuration.yaml
+For running the code, we give the devices more userfriendly names. This can be done in the /opt/zigbee2mqtt/data/configuration.yaml file, located on the PI. Change the devices names to the names shown in [the following picture (please excuse the quality).](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/Pictures/configuration.yaml.png)
 
-[The configuration.yaml file](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/Pictures/configuration.yaml.png)
+Importantly, this has to bee done after all the wanted devices are connected to zigbee, as the devices will otherwise not appear.
 
-This has to bee done after all the wanted devices are connected
+**Transitions library**
 
-**Transitions**
+To install the library, simply open a treminal and run the following code:
 
-Simply open a treminal and run the following code
-
-	$pip3 install transitions
+	$ pip3 install transitions
 
 **Running the code for the Automated Light Guide**
 
-Frist you download the RasPi_Code folder in the repositori to the RasPi.
-
-Then the Zigbee2Mqtt has to be run by the following command
+For this, Zigbee2Mqtt has to be started by executing the following commands in a new terminal:
 
 	$cd /opt/zigbee2mqtt
 	
 	$npm start
 
-Then when the code is extracted and the terminal for in side the RasPi_Code folder and then it is simply too run the following command:
+Secondly, you must first clone the repository, and in a console navigate to the *RasPi_Code* folder. In the new console, to run the code, simply execute the following command:
 
 	$python3 BLC_Main.py
-	
-**Adding more Sensor and LED**
-Frist the device is add to the zigbee2mqtt then the device name can be cange to a more frindly name in the /opt/zigbee2mqtt/data/configuration.yaml
 
-Then the device has to bee added in BLC_main.py her
+
+**Adding/removing more Sensor and LED**
+The automated light guide is scalable with minor changes in the source code.
+First, add/remove the friendly name to the configuration.yaml file, in order to access it in the code.
+
+Then, the device has to bee added manually in BLC_main.py like the following:
 
 ```python
 #The PIR is created through the model class using the add function.   
