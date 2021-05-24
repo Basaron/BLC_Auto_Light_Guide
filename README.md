@@ -48,7 +48,7 @@ CREATE TABLE blc.devices(
 			user_id INT NOT NULL, 
 			device_type VARCHAR(30) NOT NULL, 
 			device_location VARCHAR (30) NOT NULL,
-			user_device_id int,
+			user_device_id int NOT NULL,
 			PRIMARY KEY (device_id)
 			);
 
@@ -135,5 +135,15 @@ With the specific IPv4 address instead of 'IPv4 address'.
 
 
 # Setting up the Automated Light Guide
+For Setting up the Automated Light Guide you will need 4x GL-MC-001 LEDS, 4x Aqara motion Sensor, one Zigbee USB adapter and a Rasbarry PI4 Kit. On the Rasbarry PI4 there has to be installed a MQTT broker, Zigbee2Mqtt and a python libary called trantions
+
+**MQTT**
+Use the toturial from the database guide.
+
+**Zigbee2Mqtt**
+
+[This is a guide for inbstalling Zigbee2Mqtt on the RasPI](BLC_Auto_Light_Guide/References/CEP2 TUTORIAL 3.pdf)
+
+
 
 

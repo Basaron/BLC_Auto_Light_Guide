@@ -78,7 +78,7 @@ app.post('/login', (req, res) => {
 })
 
 //The homepage for the logged in user.
-app.get('/homepage', (req, res) => { //TODO: Make the actual homepage
+app.get('/homepage', (req, res) => {
 	if (!req.session.loggedin){
 		res.redirect('/')
 	} //If not logged in, go to the login page.
@@ -98,7 +98,7 @@ app.get('/homepage', (req, res) => { //TODO: Make the actual homepage
 })
 
 //If the logged out button is clicked on the homepage, end the session and go to the front page
-app.get('/logout', (req, res) => { //TODO Make this a proper logout with ending session
+app.get('/logout', (req, res) => {
 	req.session.destroy();
 	res.redirect('/');
   })
@@ -108,7 +108,7 @@ app.get('/view', (req, res) => {
 	if (!req.session.loggedin) res.redirect('/') //If not logged in, redirect to frontpage
 	else{
 		query = "SELECT * FROM main_data WHERE user_id = ?" //Get all data for the specific user
-		connection.query(query, [req.session.username], (err, rows, fields) => { //TODO: make this to user the session user ID instead of 1
+		connection.query(query, [req.session.username], (err, rows, fields) => {
 		//Execute the query
 			if(err){
 				console.log(err)

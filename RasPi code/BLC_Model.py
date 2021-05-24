@@ -10,7 +10,6 @@ class BLCZigbeeDeviceLed:
 #Dataclass for the PIR motion sensor. Same principle as for the LED with type and ID, but there are also three LED devices, which describes the previous LED, the next LED and the current LED in the corresponding rooms 0 
 @dataclass
 class BLCZigbeeDevicePir:
-
     id_: str
     type_: str
     ledPre: BLCZigbeeDeviceLed
