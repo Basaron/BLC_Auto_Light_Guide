@@ -135,7 +135,7 @@ With the specific IPv4 address instead of 'IPv4 address'.
 
 
 # Setting up the Automated Light Guide
-For Setting up the Automated Light Guide you will need 4x GL-MC-001 LEDS, 4x Aqara motion Sensor, one Zigbee USB adapter and a Rasbarry PI4 Kit. On the Rasbarry PI4 there has to be installed a python3, nodejs, MQTT broker, Zigbee2Mqtt and a python libary called trantions
+For Setting up the Automated Light Guide, you will need: four GL-MC-001 LEDS, four Aqara motion Sensor, one Zigbee USB adapter and a Rasberry PI 4 Kit. On the Rasberry PI, there has to be the following installed: Python3, Node JS, MQTT broker, Zigbee2Mqtt and a python library called transitions.
 
 **MQTT**
 
