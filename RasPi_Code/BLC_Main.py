@@ -1,3 +1,4 @@
+from enum import unique
 from time import sleep
 from BLC_Controller import BLCController
 from BLC_Model import BLCModel, BLCZigbeeDevicePir, BLCZigbeeDeviceLed
@@ -8,15 +9,18 @@ if __name__ == "__main__":
     # Device friendly names opt/zig/data/configuration.yaml
     devices_model = BLCModel()
 
-    #The PIR is created through the model class using the add function.   
+    #The PIR is created through the model class using the add function.
+
     devices_model.add([BLCZigbeeDevicePir("PIR", "pir", None ,BLCZigbeeDeviceLed("LED", "led0"), BLCZigbeeDeviceLed("LED1", "led1")),                                   #Bedroom PIR
+                            			  #Name   type   previous LED        name   location     own LED       name   location     Next LED        name   location     
                        BLCZigbeeDevicePir("PIR1", "pir", BLCZigbeeDeviceLed("LED", "led0"),BLCZigbeeDeviceLed("LED1", "led1"), BLCZigbeeDeviceLed("LED2", "led2")),     #Room1 PIR1
                        BLCZigbeeDevicePir("PIR2", "pir", BLCZigbeeDeviceLed("LED1", "led1"),BLCZigbeeDeviceLed("LED2", "led2"), BLCZigbeeDeviceLed("LED3", "led3")),    #Room2 PIR2
                        BLCZigbeeDevicePir("PIR3", "pir", None, None, None)                                                                                              #Bathroom PIR3
                        ])
 
     # Create a controller and give it the data model that was instantiated.
-    controller = BLCController(devices_model)
+    user_id = 1
+    controller = BLCController(devices_model, user_id)
     controller.start()
 
     print("Waiting for events...")

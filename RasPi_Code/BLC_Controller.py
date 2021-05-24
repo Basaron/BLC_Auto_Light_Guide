@@ -16,7 +16,7 @@ class BLCController:
     By handle them it can be process, store and communicate with other parts of the system. In this
     case, the class listens for zigbee2mqtt events, processes them (turn on another Zigbee device)"""
     
-    def __init__(self, devices_model: BLCModel) -> None:
+    def __init__(self, devices_model: BLCModel, user_id : int) -> None:
         """ Class initializer. The actuator and monitor devices are loaded (filtered) only when the
         class is instantiated. If the database changes, this is not reflected.
 
@@ -29,7 +29,7 @@ class BLCController:
                                                   port=self.MQTT_BROKER_PORT,
                                                   on_message_clbk=self.__zigbee2mqtt_event_received)
 
-        self.stateMachine = StateMachine(self.__devices_model, self.__z2m_client) #Here an instance of the StateMachine is created such that it knows all the clients and devices
+        self.stateMachine = StateMachine(self.__devices_model, self.__z2m_client, user_id) #Here an instance of the StateMachine is created such that it knows all the clients and devices
 
     
     def start(self) -> None:

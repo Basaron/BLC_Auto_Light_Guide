@@ -9,7 +9,7 @@ import time
 class StateMachine:
     states = ['Bedroom', 'Room1', 'Room2', 'Bathroom'] #Creates the states according to the rooms in the building 
 
-    def __init__(self, devices_model, z2m_client):
+    def __init__(self, devices_model, z2m_client, user_id):
     
         """ constructor: 
         The bedroom is set as the starting state."""
@@ -18,7 +18,8 @@ class StateMachine:
             states=self.states,
             initial='Bedroom',
         )
-    
+
+        self.user_id = user_id
         #Instances of the devices and the zigbee client is also instantiated
         self.__devices_model = devices_model
         self.__z2m_client = z2m_client
@@ -101,28 +102,28 @@ class StateMachine:
         self.__z2m_client.change_state(device.ledNext.id_, "ON")                            #Changing the state of the LED in the next room, so it is now off
         self.awake = datetime.now().strftime("%D %T") #Format: date - current time          #Gets the current time 
         self.start_to_bath = time.time()                                                    #Keeps track of the time during the transition 
-        self.pub.publishData_dump(1,    self.sesion,       1,      "Movement detected")     #Publishing data to the database (occupancy message)
+        self.pub.publishData_dump(self.user_id,    self.sesion,       1,      "Movement detected")     #Publishing data to the database (occupancy message)
 
     def fun_room1_to_room2(self):
         device = self.__devices_model.find("PIR1")                                          #Getting the correct deviceID
         self.__z2m_client.change_state(device.ledNext.id_, "ON")                            
         self.__z2m_client.change_state(device.ledOwn.id_, "ON")
         self.__z2m_client.change_state(device.ledPre.id_, "OFF")                            #Turning off the LED in the former room 
-        self.pub.publishData_dump(1,    self.sesion,       2,      "Movement detected")     #publishData(patientID, sessionID, deviceID, message)
+        self.pub.publishData_dump(self.user_id,    self.sesion,       2,      "Movement detected")     #publishData(patientID, sessionID, deviceID, message)
     
     def fun_room2_to_bath(self):
         device = self.__devices_model.find("PIR2")
         self.__z2m_client.change_state(device.ledNext.id_, "ON")
         self.__z2m_client.change_state(device.ledOwn.id_, "ON")
         self.__z2m_client.change_state(device.ledPre.id_, "OFF")
-        self.pub.publishData_dump(1,    self.sesion,       3,      "Movement detected")
+        self.pub.publishData_dump(self.user_id,    self.sesion,       3,      "Movement detected")
     
     #This function determines when the user has been to the bathroom. Here the logic changes for the state machine and now "reverses"
     def fun_in_bath(self):
         self.finish_to_bath = time.time()             
         self.start_in_bath = time.time()
         self.Been_to_bath = True                                                            #User has been to bathroom.
-        self.pub.publishData_dump(1,    self.sesion,       4,      "Movement detected")
+        self.pub.publishData_dump(self.user_id,    self.sesion,       4,      "Movement detected")
 
 
     def fun_bath_to_room2(self):
@@ -132,20 +133,20 @@ class StateMachine:
         self.__z2m_client.change_state(device.ledPre.id_, "ON")
         self.finish_in_bath = time.time()
         self.start_from_bath = time.time()
-        self.pub.publishData_dump(1,    self.sesion,       3,      "Movement detected")
+        self.pub.publishData_dump(self.user_id,    self.sesion,       3,      "Movement detected")
 
     def fun_room2_to_room1(self):
         device = self.__devices_model.find("PIR1")
         self.__z2m_client.change_state(device.ledNext.id_, "OFF")
         self.__z2m_client.change_state(device.ledOwn.id_, "ON")
         self.__z2m_client.change_state(device.ledPre.id_, "ON")
-        self.pub.publishData_dump(1,    self.sesion,       2,      "Movement detected")
+        self.pub.publishData_dump(self.user_id,    self.sesion,       2,      "Movement detected")
 
     def fun_room1_to_bed(self):
         device = self.__devices_model.find("PIR")
         self.__z2m_client.change_state(device.ledOwn.id_, "ON")
         self.__z2m_client.change_state(device.ledNext.id_, "OFF")
-        self.pub.publishData_dump(1,    self.sesion,       1,      "Movement detected")
+        self.pub.publishData_dump(self.user_id,    self.sesion,       1,      "Movement detected")
         self.finish_from_bath = time.time()
 
     def fun_bed_to_sleep(self):                                     
@@ -159,7 +160,7 @@ class StateMachine:
         from_bathroom = int(self.finish_from_bath - self.start_from_bath)
         
         print("to bathroom = ", to_bathroom, ", on bathroom = ", on_bathroom, " and from bathroom = ", from_bathroom)
-        self.pub.publishData_main(1, self.sesion, self.awake, to_bathroom, on_bathroom, from_bathroom, "User went to bathroom and back to bed") #Publishing the time data to the webserver
+        self.pub.publishData_main(self.user_id, self.sesion, self.awake, to_bathroom, on_bathroom, from_bathroom, "User went to bathroom and back to bed") #Publishing the time data to the webserver
         self.sesion += 1
         
         self.Been_to_bath = False #Resetting the variable back to false

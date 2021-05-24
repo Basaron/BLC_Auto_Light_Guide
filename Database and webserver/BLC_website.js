@@ -15,12 +15,12 @@ app.use('/pictures',  express.static('pictures')); //To access the pictures for 
 app.use(session({
 	secret: '123456cat',
 	resave: false,
-	username: '', //Used to safe the user logged in
+	username: '', //Used to save the user logged in
 	saveUninitialized: true,
 	cookie: {
 		expires: 3600000 //Expires after an hour
 	}
-  }));
+}));
 
 app.set('view engine', 'ejs') //To get the ejs files as the view.
 
