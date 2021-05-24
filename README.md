@@ -135,15 +135,32 @@ With the specific IPv4 address instead of 'IPv4 address'.
 
 
 # Setting up the Automated Light Guide
-For Setting up the Automated Light Guide you will need 4x GL-MC-001 LEDS, 4x Aqara motion Sensor, one Zigbee USB adapter and a Rasbarry PI4 Kit. On the Rasbarry PI4 there has to be installed a MQTT broker, Zigbee2Mqtt and a python libary called trantions
+For Setting up the Automated Light Guide you will need 4x GL-MC-001 LEDS, 4x Aqara motion Sensor, one Zigbee USB adapter and a Rasbarry PI4 Kit. On the Rasbarry PI4 there has to be installed a python3, nodejs, MQTT broker, Zigbee2Mqtt and a python libary called trantions
 
 **MQTT**
+
 Use the toturial from the database guide.
 
 **Zigbee2Mqtt**
 
-[This is a guide for inbstalling Zigbee2Mqtt on the RasPI](BLC_Auto_Light_Guide/References/CEP2 TUTORIAL 3.pdf)
+[This is a guide for inbstalling Zigbee2Mqtt on the RasPI](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/References/CEP2%20TUTORIAL%203.pdf)
 
+**Transitions**
 
+Simply open a treminal and run the following code
 
+	$pip install transitions==0.6.4
 
+**Running the code for the Automated Light Guide**
+
+Frist you download the RasPi_Code folder in the repositori to the RasPi.
+
+Then the Zigbee2Mqtt has to be run by the following command
+
+	$cd /opt/zigbee2mqtt
+	
+	$npm start
+
+Then when the code is extracted and the terminal for in side the RasPi_Code folder and then it is simply too run the following command:
+
+	$python3 BLC_Main.py
