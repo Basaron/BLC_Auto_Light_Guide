@@ -169,6 +169,7 @@ Secondly, you must first clone the repository, and in a console navigate to the 
 
 
 **Adding/removing more Sensor and LED**
+
 The automated light guide is scalable with minor changes in the source code. Please remember the sensor must be added to the database aswell.
 First, add/remove the friendly name to the configuration.yaml file, in order to access it in the code.
 
