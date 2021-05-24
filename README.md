@@ -172,8 +172,9 @@ Then when the code is extracted and the terminal for in side the RasPi_Code fold
 	$python3 BLC_Main.py
 	
 **Adding more Sensor and LED**
+Frist the device is add to the zigbee2mqtt then the device name can be cange to a more frindly name in the /opt/zigbee2mqtt/data/configuration.yaml
 
-Frist the device has to bee added in BLC_main.py her
+Then the device has to bee added in BLC_main.py her
 
 ```python
 #The PIR is created through the model class using the add function.   
