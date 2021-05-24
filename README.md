@@ -145,11 +145,17 @@ Use the toturial from the database guide.
 
 [This is a guide for inbstalling Zigbee2Mqtt on the RasPI](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/References/CEP2%20TUTORIAL%203.pdf)
 
+And for running the code in this the repository we use the userfriendly name change that can be done in the /opt/zigbee2mqtt/data/configuration.yaml
+
+[The configuration.yaml file](https://github.com/Basaron/BLC_Auto_Light_Guide/blob/main/Pictures/configuration.yaml.png)
+
+This has to bee done after all the wanted devices are connected
+
 **Transitions**
 
 Simply open a treminal and run the following code
 
-	$pip install transitions==0.6.4
+	$pip3 install transitions
 
 **Running the code for the Automated Light Guide**
 
@@ -164,3 +170,41 @@ Then the Zigbee2Mqtt has to be run by the following command
 Then when the code is extracted and the terminal for in side the RasPi_Code folder and then it is simply too run the following command:
 
 	$python3 BLC_Main.py
+	
+**Adding more Sensor and LED**
+
+Frist the device has to bee added in BLC_main.py her
+
+```python
+#The PIR is created through the model class using the add function.   
+    devices_model.add([BLCZigbeeDevicePir("PIR", "pir", None ,BLCZigbeeDeviceLed("LED", "led0"), BLCZigbeeDeviceLed("LED1", "led1")),                                   #Bedroom PIR
+                       BLCZigbeeDevicePir("PIR1", "pir", BLCZigbeeDeviceLed("LED", "led0"),BLCZigbeeDeviceLed("LED1", "led1"), BLCZigbeeDeviceLed("LED2", "led2")),     #Room1 PIR1
+                       BLCZigbeeDevicePir("PIR2", "pir", BLCZigbeeDeviceLed("LED1", "led1"),BLCZigbeeDeviceLed("LED2", "led2"), BLCZigbeeDeviceLed("LED3", "led3")),    #Room2 PIR2
+                       BLCZigbeeDevicePir("PIR3", "pir", None, None, None)                                                                                              #Bathroom PIR3
+                       ])
+```
+
+Then in the BLC_StateMachine.py There will need to be add a new state and then the correspondig new transitions. From the new states to the preexisting states
+
+
+```python
+#State 3 : Room 2
+        elif self.state == 'Room2':
+            print("room2")
+            if device_id == "PIR1" and occupancy and self.Been_to_bath:
+                self.room2_to_room1()
+            elif device_id =="PIR2" and occupancy and not self.Been_to_bath:
+                self.room2_to_bath()
+```
+
+```python
+ self.machine.add_transition('room2_to_bath', 'Room2', 'Bathroom', after='fun_room2_to_bath')
+        self.machine.add_transition('room2_to_room1', 'Room2', 'Room1', after='fun_room2_to_room1')
+
+        self.machine.add_transition('bath_to_room2', 'Bathroom', 'Room2', after='fun_bath_to_room2')
+```
+
+
+
+
+
