@@ -169,7 +169,7 @@ Secondly, you must first clone the repository, and in a console navigate to the 
 
 
 **Adding/removing more Sensor and LED**
-The automated light guide is scalable with minor changes in the source code.
+The automated light guide is scalable with minor changes in the source code. Please remember the sensor must be added to the database aswell.
 First, add/remove the friendly name to the configuration.yaml file, in order to access it in the code.
 
 Then, the device has to bee added manually in BLC_main.py like the following:
@@ -177,14 +177,27 @@ Then, the device has to bee added manually in BLC_main.py like the following:
 ```python
 #The PIR is created through the model class using the add function.   
     devices_model.add([BLCZigbeeDevicePir("PIR", "pir", None ,BLCZigbeeDeviceLed("LED", "led0"), BLCZigbeeDeviceLed("LED1", "led1")),                                   #Bedroom PIR
-                       BLCZigbeeDevicePir("PIR1", "pir", BLCZigbeeDeviceLed("LED", "led0"),BLCZigbeeDeviceLed("LED1", "led1"), BLCZigbeeDeviceLed("LED2", "led2")),     #Room1 PIR1
+                       			  #Name   type   previous LED        name   location     own LED       name   location     Next LED        name   location  
+		       BLCZigbeeDevicePir("PIR1", "pir", BLCZigbeeDeviceLed("LED", "led0"),BLCZigbeeDeviceLed("LED1", "led1"), BLCZigbeeDeviceLed("LED2", "led2")),     #Room1 PIR1
                        BLCZigbeeDevicePir("PIR2", "pir", BLCZigbeeDeviceLed("LED1", "led1"),BLCZigbeeDeviceLed("LED2", "led2"), BLCZigbeeDeviceLed("LED3", "led3")),    #Room2 PIR2
                        BLCZigbeeDevicePir("PIR3", "pir", None, None, None)                                                                                              #Bathroom PIR3
                        ])
 ```
 
-Then in the BLC_StateMachine.py There will need to be add a new state and then the correspondig new transitions. From the new states to the preexisting states
+When adding a sensor, it needs to follow the general format they all follow. For explaining, see the comment. When inserting a new sensor, the neighbours of the others need to be checked, in order to make sure they match.
 
+In  *BLC_StateMachine.py*, a new transition function and new state for the new sensor must be added, as well as the corresponding new transitions with said function. The transitions are located in the *init* functions, and a transition to the next and the previous room must be added. An example of a transition function is given below:
+
+```python
+def fun_room1_to_room2(self):
+        device = self.__devices_model.find("PIR1")                                          #Getting the correct deviceID
+        self.__z2m_client.change_state(device.ledNext.id_, "ON")                            
+        self.__z2m_client.change_state(device.ledOwn.id_, "ON")
+        self.__z2m_client.change_state(device.ledPre.id_, "OFF")                            #Turning off the LED in the former room 
+        self.pub.publishData_dump(self.user_id,    self.sesion,       2,      "Movement detected")     #publishData(patientID, sessionID, deviceID, message)
+```
+Here, you must change the names to the friendly name of the device. The '2' in the example (input to the publishData_dump function) is the sensor number, starting from the bedroom sensor at 1 and bathroom sensor being the largest number (4 in our case).
+Using this new function, a new state is added as shown below:
 
 ```python
 #State 3 : Room 2
@@ -196,13 +209,16 @@ Then in the BLC_StateMachine.py There will need to be add a new state and then t
                 self.room2_to_bath()
 ```
 
+At last, a new transition must be added, as shown in the example below:
+
 ```python
- self.machine.add_transition('room2_to_bath', 'Room2', 'Bathroom', after='fun_room2_to_bath')
+ 	self.machine.add_transition('room2_to_bath', 'Room2', 'Bathroom', after='fun_room2_to_bath')
         self.machine.add_transition('room2_to_room1', 'Room2', 'Room1', after='fun_room2_to_room1')
 
         self.machine.add_transition('bath_to_room2', 'Bathroom', 'Room2', after='fun_bath_to_room2')
 ```
 
+It is important the transition includes the newly added transition function, as it would otherwise make a wrong transition. If problems occur, please feel free to contact BLC for technical support.
 
 
 
