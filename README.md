@@ -139,7 +139,7 @@ For Setting up the Automated Light Guide, you will need: four GL-MC-001 LEDS, fo
 
 **MQTT**
 
-Please refer to the tutorial from the database guide.
+Please refer to the tutorial from the database guide. Additionally, in the *BLC_SendData* file, the IP addresss of the broker located on the web broker need to corrected. Located at line 21 and 41, simply change the IP address to the IP address of the web server.
 
 **Zigbee2MQTT**
 
